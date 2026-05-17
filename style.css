@@ -6,7 +6,7 @@ body {
     user-select: none;
 }
 
-/* Navegación Superior */
+/* Barra Navegación Superior */
 .top-nav {
     background-color: #26303c;
     display: flex;
@@ -28,21 +28,20 @@ body {
 .content-container { padding: 14px; max-width: 430px; margin: 0 auto; }
 .hidden { display: none !important; }
 
-/* Títulos y Secciones */
 .section-chest { margin-bottom: 25px; }
 .title-chest { font-size: 16px; color: #fff; margin: 0 0 10px 0; font-weight: 600; }
 .arrow { color: #e39d39; margin-right: 5px; }
 .event-tag { color: #5bc0de; font-size: 13px; }
 
-/* Carrusel Horizontal Animado */
+/* Carrusel Horizontal Animado (Invocaciones) */
 .carousel-container {
     background: #161b22; padding: 10px; border-radius: 4px;
-    overflow-hidden: hidden; display: flex; margin-bottom: 15px;
+    overflow: hidden; display: flex; margin-bottom: 15px;
     border: 1px solid #2d3846;
 }
 .carousel-track {
     display: flex; gap: 12px;
-    animation: scrollCarousel 25s linear infinite;
+    animation: scrollCarousel 20s linear infinite;
     width: max-content;
 }
 .carousel-track:hover { animation-play-state: paused; }
@@ -57,7 +56,7 @@ body {
     100% { transform: translateX(-50%); }
 }
 
-/* Detalles de los Cofres */
+/* Indicadores de Cofres */
 .availability-badge {
     background-color: #0d1117; border: 1px solid #e39d39; color: #e39d39;
     padding: 3px 12px; font-size: 12px; border-radius: 4px; width: fit-content; margin: 0 auto 6px auto;
@@ -67,7 +66,7 @@ body {
 .chest-display { display: flex; justify-content: center; margin-bottom: 12px; }
 .main-chest-img { width: 110px; height: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
 
-/* Botones */
+/* Botones Universales */
 .btn-open {
     background: linear-gradient(180deg, #4a5768 0%, #2c3845 100%);
     color: #fff; border: 1px solid #000; width: 100%; padding: 11px 0;
@@ -83,9 +82,10 @@ body {
     font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;
 }
 
-/* Tarjetas Reales del Álbum */
+/* Estructura del Álbum de Cromos */
 .mystery-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
 .album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 8px; }
+.gems-counter-row { display: flex; justify-content: space-between; background: #161b22; padding: 10px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-bottom: 15px; border: 1px solid #2d3846; color: #e39d39; }
 
 .card-container-relative { position: relative; width: 100%; height: 215px; }
 
@@ -95,11 +95,11 @@ body {
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 .card-top-bar {
-    background: #b8c1cb; text-align: center; font-weight: bold; color: #000;
+    background: #364453; text-align: center; font-weight: bold; color: #fff;
     font-size: 13px; height: 18px; line-height: 18px; cursor: pointer;
     border-bottom: 1px solid #000; transition: background 0.2s;
 }
-.card-top-bar:hover { background: #dce1e6; }
+.card-top-bar:hover { background: #e39d39; color: #000; }
 
 .card-img-box { flex: 1; background: #000; overflow: hidden; }
 .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
@@ -111,7 +111,12 @@ body {
 .card-footer b { font-size: 9px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card-footer span { font-size: 8px; color: #8a99a5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Menú Desplegable sobre la Carta (Efecto Foto 2) */
+/* Categorías de Rarezas (Bordes de Cristal) */
+.card-header.comun { background-color: #5bc0de; font-size: 10px; text-align: center; color: #000; font-weight: bold; }
+.card-header.raro { background-color: #5cb85c; font-size: 10px; text-align: center; color: #000; font-weight: bold; }
+.card-header.epico { background-color: #e39d39; font-size: 10px; text-align: center; color: #000; font-weight: bold; }
+
+/* Menú Desplegable de la Carta */
 .card-action-menu {
     position: absolute; top: 18px; left: 0; width: 100%; height: calc(100% - 18px);
     background: rgba(16, 22, 29, 0.95); z-index: 5;
@@ -123,7 +128,7 @@ body {
 }
 .btn-action-menu:hover { background: #e39d39; color: #000; }
 
-/* Perfil Elegante */
+/* Perfil */
 .profile-card { background: #26303c; padding: 16px; border-radius: 6px; border: 1px solid #2d3846; }
 .profile-header-box { text-align: center; margin-bottom: 15px; position: relative; }
 .user-tag-title {
@@ -146,12 +151,12 @@ body {
 .stats-text-box p { margin: 5px 0; font-size: 13px; color: #a2afbc; }
 .stat-val { font-weight: bold; color: #fff; font-family: monospace; font-size: 14px; }
 
-/* Barra de experiencia */
+/* Barra de medalla */
 .progress-section { margin-top: 15px; }
 .progress-txt { font-size: 12px; color: #8393a2; margin-bottom: 6px; }
 .bar-container { background: #0d1117; height: 14px; border-radius: 7px; overflow: hidden; border: 1px solid #2d3846; }
 .bar-fill { background: linear-gradient(90deg, #e39d39, #f3be7a); height: 100%; width: 0.15%; transition: width 0.5s; }
 
-/* Modal */
+/* Modales */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; }
 .modal-content { background: #26303c; padding: 20px; border-radius: 6px; text-align: center; max-width: 260px; width: 100%; display: flex; flex-direction: column; align-items: center; border: 1px solid #3c4b5e; }
