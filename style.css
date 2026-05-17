@@ -122,6 +122,48 @@ body {
 .card-header.comun { background-color: #5bc0de; font-size: 10px; text-align: center; color: #000; font-weight: bold; }
 .card-header.raro { background-color: #5cb85c; font-size: 10px; text-align: center; color: #000; font-weight: bold; }
 .card-header.epico { background-color: #e39d39; font-size: 10px; text-align: center; color: #000; font-weight: bold; }
+.card-container-relative {
+    position: relative;
+    cursor: pointer;
+}
+.card-hover-menu {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 10;
+}
+.card-hover-menu.hidden { display: none; }
+.card-hover-menu.visible { display: flex; }
+.menu-option-btn {
+    width: 90%;
+    padding: 8px 4px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    text-shadow: 1px 1px 2px #000;
+}
+.card-header-action {
+    position: absolute;
+    top: 2px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    padding: 0 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    z-index: 5;
+}
 
 /* Perfil de Usuario */
 .profile-card { background: #26303c; padding: 16px; border-radius: 6px; border: 1px solid #2d3846; }
