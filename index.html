@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Juego de Cromos Coleccionables</title>
+    <title>Sekai Chronicles</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,93 +17,84 @@
     <main class="content-container">
 
         <div id="view-cofres" class="view-section">
-            
             <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Cofre de Evento <span class="event-tag">(Navidad)</span>:</h2>
-                <ul class="bullet-list">
-                    <li>* Puedes comprar 3 cofres cada 24 horas.</li>
-                    <li>* El precio por cada cofre es de 500 pts.</li>
-                    <li>* Contiene los cromos especiales del evento:</li>
-                </ul>
-                <div class="cards-row">
-                    <div class="card-preview"><div class="card-header raro">Cromo Raro</div><div class="card-img-box"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=150" alt="Goku"></div><div class="card-footer" style="font-size:7px;">Goku (navidad)</div></div>
-                    <div class="card-preview"><div class="card-header raro">Cromo Raro</div><div class="card-img-box"><img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=150" alt="Jaeun"></div><div class="card-footer" style="font-size:7px;">Jaeun (navidad)</div></div>
-                    <div class="card-preview"><div class="card-header raro">Cromo Raro</div><div class="card-img-box"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" alt="Chopper"></div><div class="card-footer" style="font-size:7px;">Chopper (navidad)</div></div>
+                <h2 class="title-chest"><span class="arrow">❯</span> Banner de Evento <span class="event-tag">(Navidad)</span>:</h2>
+                
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=150" alt="Hayoon"><span>Hayoon</span></div>
+                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" alt="Vegetto"><span>Vegetto</span></div>
+                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=150" alt="Goku"><span>Goku</span></div>
+                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" alt="Si-Woon"><span>Si-Woon</span></div>
+                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=150" alt="Komi"><span>Komi</span></div>
+                    </div>
                 </div>
-                <div class="availability-badge" id="badge-evento">3 Cofres Disponibles</div>
+
+                <div class="availability-badge" id="badge-evento">2 Cofre Disponible</div>
                 <div class="timer-display" id="timer-evento">Siguiente reinicio en: --:--:--</div>
-                <div class="cost-tag">Costo: -500 Puntos</div>
-                <div class="chest-display"><img src="https://cdn-icons-png.flaticon.com/512/6124/6124991.png" class="main-chest-img" alt="Cofre Evento"></div>
-                <button class="btn-open" id="btn-abrir-evento">Abrir Cofre</button>
+                <div class="cost-tag">Costo: -500 Puntos de Alma</div>
+                
+                <div class="chest-display">
+                    <img src="https://cdn-icons-png.flaticon.com/512/6124/6124991.png" class="main-chest-img" alt="Cofre Evento">
+                </div>
+                <button class="btn-open" id="btn-abrir-evento">Invocación Estándar</button>
             </section>
 
             <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Cofre Diario Épico:</h2>
-                <ul class="bullet-list">
-                    <li>* Puedes comprar este cofre 1 vez cada 24 horas.</li>
-                    <li>* El precio de este cofre es de 1000 pts.</li>
-                    <li>* Incluye cromos de alta rareza de forma aleatoria:</li>
-                </ul>
-                <div class="cards-row">
+                <h2 class="title-chest"><span class="arrow">❯</span> Invocación Divina (Diaria):</h2>
+                <div class="mystery-row">
                     <div class="card-preview mystery"><div class="card-header comun">Cromo</div><div class="mystery-sign">?</div></div>
                     <div class="card-preview mystery"><div class="card-header raro">Cromo Raro</div><div class="mystery-sign">?</div></div>
                     <div class="card-preview mystery"><div class="card-header epico">Cromo Épico</div><div class="mystery-sign">?</div></div>
                 </div>
                 <div class="availability-badge" id="badge-diario">1 Cofre Disponible</div>
                 <div class="timer-display" id="timer-diario">Siguiente reinicio en: --:--:--</div>
-                <div class="cost-tag">Costo: -1000 Puntos</div>
-                <div class="chest-display"><img src="https://cdn-icons-png.flaticon.com/512/2854/2854570.png" class="main-chest-img" alt="Cofre Diario"></div>
-                <button class="btn-open" id="btn-abrir-diario">Abrir Cofre</button>
-            </section>
-
-            <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Cofre de Gemas:</h2>
-                <ul class="bullet-list">
-                    <li>* Te otorga gemas para transformar cromos repetidos en el futuro.</li>
-                    <li>* El precio de este cofre es de 100 pts.</li>
-                </ul>
-                <div class="availability-badge">Siempre Disponible</div>
-                <div class="cost-tag" style="margin-top: 5px;">Costo: -100 Puntos</div>
-                <div class="chest-display"><img src="https://cdn-icons-png.flaticon.com/512/4113/4113941.png" class="main-chest-img" alt="Cofre Gemas"></div>
-                <button class="btn-open" id="btn-abrir-gemas">Abrir Cofre</button>
+                <div class="cost-tag">Costo: -1000 Puntos de Alma</div>
+                <div class="chest-display">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2854/2854570.png" class="main-chest-img" alt="Cofre Diario">
+                </div>
+                <button class="btn-open" id="btn-abrir-diario">Invocación Épica</button>
             </section>
         </div>
 
         <div id="view-perfil" class="view-section hidden">
             <div class="profile-card">
                 <div class="profile-header-box">
-                    <div class="main-avatar-container">
-                        <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300" alt="Avatar">
+                    <div class="user-tag-title">USUARIO</div>
+                    <div class="main-avatar-container" id="profile-avatar-display">
+                        <div class="no-avatar-msg">Selecciona un cromo como avatar</div>
                     </div>
-                    <h1 class="profile-username"><span id="display-username">Cargando...</span> <span class="edit-text" id="btn-editar-nombre">Editar</span></h1>
+                    <h1 class="profile-username"><span id="display-username">santso</span> <span class="edit-text" id="btn-editar-nombre">Editar</span></h1>
                 </div>
 
                 <h3 class="sub-title-profile"><span class="arrow">❯</span> Mis Estadísticas:</h3>
                 <div class="stats-panel">
                     <div class="rank-badge-box">
-                        <img src="https://cdn-icons-png.flaticon.com/512/4781/4781517.png" class="rank-icon" alt="Rango Platino">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4781/4781517.png" class="rank-icon" id="rank-medal-icon" alt="Medalla Rango">
                     </div>
                     <div class="stats-text-box">
-                        <p>Caps Subidos: <span class="stat-val">0</span></p>
+                        <p>Misiones Completadas: <span class="stat-val" id="stats-misiones">0</span></p>
                         <p>Cromos: <span class="stat-val" id="profile-card-count">0/300</span></p>
-                        <p>Puntos: <span class="stat-val" id="profile-points-count">500</span></p>
+                        <p>Puntos de Alma: <span class="stat-val" id="profile-points-count">500</span></p>
                     </div>
                 </div>
 
                 <div class="progress-section">
-                    <div class="progress-txt">Progreso de medalla <span id="progress-text-percent">0.00 %</span></div>
+                    <div class="progress-txt">Progreso de medalla <span id="progress-text-percent">0.15 %</span></div>
                     <div class="bar-container">
                         <div class="bar-fill" id="profile-bar-fill"></div>
                     </div>
                 </div>
+
+                <button class="btn-mission" id="btn-hacer-mision">⚔️ Enviar a Mazmorra (+PA)</button>
             </div>
         </div>
 
         <div id="view-cromos" class="view-section hidden">
             <div class="gems-counter-row">
                 <div>Gemas: <span id="gem-count-comun">10</span></div>
-                <div>Raras: <span id="gem-count-rara">0</span></div>
-                <div>Épicas: <span id="gem-count-epica">0</span></div>
+                <div>Gemas Raras: <span id="gem-count-rara">0</span></div>
+                <div>Gemas Épicas: <span id="gem-count-epica">0</span></div>
             </div>
             
             <div class="album-grid" id="album-grid-container">
