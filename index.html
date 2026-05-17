@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sekai Chronicles</title>
+    <title>Crónicas de Molly - RPG Gacha</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header class="top-nav">
-        <button class="nav-item active" id="tab-btn-cofres">Cofres</button>
+        <button class="nav-item active" id="tab-btn-cofres">Invocaciones</button>
         <button class="nav-item" id="tab-btn-perfil">Mis Datos</button>
         <button class="nav-item" id="tab-btn-cromos">Mis Cromos</button>
     </header>
@@ -18,19 +18,14 @@
 
         <div id="view-cofres" class="view-section">
             <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Banner de Evento <span class="event-tag">(Navidad)</span>:</h2>
+                <h2 class="title-chest"><span class="arrow">❯</span> Banner de Evento <span class="event-tag">(Arenas Cósmicas)</span>:</h2>
                 
                 <div class="carousel-container">
-                    <div class="carousel-track">
-                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=150" alt="Hayoon"><span>Hayoon</span></div>
-                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" alt="Vegetto"><span>Vegetto</span></div>
-                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=150" alt="Goku"><span>Goku</span></div>
-                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" alt="Si-Woon"><span>Si-Woon</span></div>
-                        <div class="carousel-card"><img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=150" alt="Komi"><span>Komi</span></div>
-                    </div>
+                    <div class="carousel-track" id="carrusel-dinamico">
+                        </div>
                 </div>
 
-                <div class="availability-badge" id="badge-evento">2 Cofre Disponible</div>
+                <div class="availability-badge" id="badge-evento">2 Cofres Disponibles</div>
                 <div class="timer-display" id="timer-evento">Siguiente reinicio en: --:--:--</div>
                 <div class="cost-tag">Costo: -500 Puntos de Alma</div>
                 
@@ -62,9 +57,9 @@
                 <div class="profile-header-box">
                     <div class="user-tag-title">USUARIO</div>
                     <div class="main-avatar-container" id="profile-avatar-display">
-                        <div class="no-avatar-msg">Selecciona un cromo como avatar</div>
+                        <div class="no-avatar-msg">Selecciona un cromo como avatar en tu colección</div>
                     </div>
-                    <h1 class="profile-username"><span id="display-username">santso</span> <span class="edit-text" id="btn-editar-nombre">Editar</span></h1>
+                    <h1 class="profile-username"><span id="display-username">Pepinito</span> <span class="edit-text" id="btn-editar-nombre">Editar</span></h1>
                 </div>
 
                 <h3 class="sub-title-profile"><span class="arrow">❯</span> Mis Estadísticas:</h3>
@@ -73,9 +68,9 @@
                         <img src="https://cdn-icons-png.flaticon.com/512/4781/4781517.png" class="rank-icon" id="rank-medal-icon" alt="Medalla Rango">
                     </div>
                     <div class="stats-text-box">
-                        <p>Misiones Completadas: <span class="stat-val" id="stats-misiones">0</span></p>
-                        <p>Cromos: <span class="stat-val" id="profile-card-count">0/300</span></p>
-                        <p>Puntos de Alma: <span class="stat-val" id="profile-points-count">500</span></p>
+                        <p>Mazmorras Superadas: <span class="stat-val" id="stats-misiones">0</span></p>
+                        <p>Héroes Coleccionados: <span class="stat-val" id="profile-card-count">0/300</span></p>
+                        <p>Puntos de Alma: <span class="stat-val" id="profile-points-count">5300</span></p>
                     </div>
                 </div>
 
@@ -86,7 +81,7 @@
                     </div>
                 </div>
 
-                <button class="btn-mission" id="btn-hacer-mision">⚔️ Enviar a Mazmorra (+PA)</button>
+                <button class="btn-mission" id="btn-hacer-mision">⚔️ Entrar a Mazmorra (+PA)</button>
             </div>
         </div>
 
