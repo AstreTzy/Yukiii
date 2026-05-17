@@ -1,129 +1,157 @@
 body {
-    background-color: #222930;
-    color: #e0e5ea;
-    font-family: Arial, sans-serif;
+    background-color: #1f262e;
+    color: #cbd4db;
+    font-family: 'Segoe UI', Arial, sans-serif;
     margin: 0; padding: 0;
     user-select: none;
 }
 
-/* Navegación y pestañas superiores estilo App */
+/* Navegación Superior */
 .top-nav {
-    background-color: #2c373e;
+    background-color: #26303c;
     display: flex;
     justify-content: space-around;
-    border-bottom: 2px solid #232b31;
+    border-bottom: 2px solid #192026;
     position: sticky; top: 0; z-index: 10;
 }
 .nav-item {
     background: none; border: none;
-    color: #92a1a9; font-size: 14px; font-weight: bold;
-    padding: 15px 10px; cursor: pointer; width: 100%; text-align: center;
-    transition: background 0.2s, transform 0.1s;
-}
-.nav-item:active {
-    transform: scale(0.95);
-    background-color: rgba(255,255,255,0.05);
+    color: #8393a2; font-size: 14px; font-weight: bold;
+    padding: 16px 10px; cursor: pointer; width: 100%; text-align: center;
+    transition: all 0.2s;
 }
 .nav-item.active {
-    color: #4eb0b0; border-bottom: 3px solid #4eb0b0;
+    color: #e39d39; border-bottom: 3px solid #e39d39;
+    background-color: rgba(255, 255, 255, 0.02);
 }
 
-.content-container {
-    padding: 16px; max-width: 450px; margin: 0 auto;
-}
+.content-container { padding: 14px; max-width: 430px; margin: 0 auto; }
 .hidden { display: none !important; }
 
-/* Secciones de Cofres */
-.section-chest { margin-bottom: 30px; }
-.title-chest { font-size: 17px; color: #ffffff; margin: 0 0 5px 0; font-weight: normal;}
-.arrow { color: #4eb0b0; margin-right: 4px; }
-.event-tag { color: #5bc0de; }
-.bullet-list { list-style: none; padding: 0; margin: 0 0 15px 0; font-size: 13px; color: #cbd4db; }
-.bullet-list li { margin-bottom: 3px; }
+/* Títulos y Secciones */
+.section-chest { margin-bottom: 25px; }
+.title-chest { font-size: 16px; color: #fff; margin: 0 0 10px 0; font-weight: 600; }
+.arrow { color: #e39d39; margin-right: 5px; }
+.event-tag { color: #5bc0de; font-size: 13px; }
 
-/* Contadores e Indicadores */
-.timer-display {
-    font-size: 11px; color: #78828c; text-align: center;
-    margin-bottom: 5px; font-family: monospace;
+/* Carrusel Horizontal Animado */
+.carousel-container {
+    background: #161b22; padding: 10px; border-radius: 4px;
+    overflow-hidden: hidden; display: flex; margin-bottom: 15px;
+    border: 1px solid #2d3846;
 }
-.cost-tag {
-    text-align: center; font-size: 13px; color: #e2a057; margin-bottom: 12px; font-weight: bold;
+.carousel-track {
+    display: flex; gap: 12px;
+    animation: scrollCarousel 25s linear infinite;
+    width: max-content;
 }
+.carousel-track:hover { animation-play-state: paused; }
+.carousel-card {
+    display: flex; flex-direction: column; width: 75px; text-align: center; font-size: 10px; color: #fff;
+}
+.carousel-card img { width: 75px; height: 100px; object-fit: cover; border-radius: 3px; border: 1px solid #3c4b5e; }
+.carousel-card span { margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@keyframes scrollCarousel {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Detalles de los Cofres */
 .availability-badge {
-    background-color: #0f1317; border: 1px solid #3a4652; color: #4eb0b0;
-    padding: 4px 12px; font-size: 13px; border-radius: 3px; width: fit-content; margin: 0 auto 5px auto;
+    background-color: #0d1117; border: 1px solid #e39d39; color: #e39d39;
+    padding: 3px 12px; font-size: 12px; border-radius: 4px; width: fit-content; margin: 0 auto 6px auto;
 }
-.chest-display { display: flex; justify-content: center; margin-bottom: 15px; }
-.main-chest-img { width: 140px; height: auto; }
+.timer-display { font-size: 11px; color: #78828c; text-align: center; margin-bottom: 4px; font-family: monospace; }
+.cost-tag { text-align: center; font-size: 12px; color: #a2afbc; margin-bottom: 12px; }
+.chest-display { display: flex; justify-content: center; margin-bottom: 12px; }
+.main-chest-img { width: 110px; height: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
 
-/* Botón de Apertura de Gacha */
+/* Botones */
 .btn-open {
-    background-color: #5cb85c; color: #000; border: none;
-    width: 100%; padding: 10px 0; font-size: 15px; font-weight: bold; border-radius: 3px; cursor: pointer;
-    transition: transform 0.1s, background-color 0.2s;
+    background: linear-gradient(180deg, #4a5768 0%, #2c3845 100%);
+    color: #fff; border: 1px solid #000; width: 100%; padding: 11px 0;
+    font-size: 14px; font-weight: bold; border-radius: 3px; cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
 }
-.btn-open:active {
-    transform: scale(0.98); background-color: #4cae4c;
-}
-.btn-open:disabled {
-    background-color: #464f58; color: #78828c; cursor: not-allowed; transform: scale(1) !important;
+.btn-open:active { transform: scale(0.99); background: #232d37; }
+.btn-open:disabled { background: #2d353f; color: #57626e; border-color: #222; cursor: not-allowed; }
+
+.btn-mission {
+    background: linear-gradient(180deg, #e39d39 0%, #b8761d 100%);
+    color: #000; border: 1px solid #7c4e0f; width: 100%; padding: 12px 0;
+    font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;
 }
 
-/* Maquetación del Cromo Individual */
-.cards-row { display: flex; gap: 8px; margin-bottom: 15px; }
+/* Tarjetas Reales del Álbum */
+.mystery-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
+.album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 8px; }
+
+.card-container-relative { position: relative; width: 100%; height: 215px; }
+
 .card-preview {
-    background-color: #d1d5db; width: 85px; height: 135px;
-    border: 1px solid #000; border-radius: 2px;
-    display: flex; flex-direction: column; overflow: hidden;
-    position: relative;
+    background-color: #1c2127; border: 1px solid #000; border-radius: 4px;
+    display: flex; flex-direction: column; overflow: hidden; height: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
-.card-header { font-size: 9px; font-weight: bold; text-align: center; padding: 2px 0; color: #000; }
-.card-header.raro { background-color: #a8c3d4; }
-.card-header.comun { background-color: #e2a057; }
-.card-header.epico { background-color: #f0ad4e; }
+.card-top-bar {
+    background: #b8c1cb; text-align: center; font-weight: bold; color: #000;
+    font-size: 13px; height: 18px; line-height: 18px; cursor: pointer;
+    border-bottom: 1px solid #000; transition: background 0.2s;
+}
+.card-top-bar:hover { background: #dce1e6; }
 
-.card-img-box { flex: 1; background: #fff; }
+.card-img-box { flex: 1; background: #000; overflow: hidden; }
 .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
 .card-footer {
-    background-color: #222930; color: #fff; font-size: 9px;
-    text-align: center; padding: 4px 1px; min-height: 25px;
-    display: flex; align-items: center; justify-content: center;
+    background-color: #181d24; color: #fff; padding: 5px 3px;
+    text-align: center; display: flex; flex-direction: column; gap: 2px;
 }
+.card-footer b { font-size: 9px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-footer span { font-size: 8px; color: #8a99a5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Cartas Ocultas / Incógnitas */
-.card-preview.mystery { background-color: #b0b8c1; }
-.mystery-sign { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 50px; color: #000; font-weight: bold; }
+/* Menú Desplegable sobre la Carta (Efecto Foto 2) */
+.card-action-menu {
+    position: absolute; top: 18px; left: 0; width: 100%; height: calc(100% - 18px);
+    background: rgba(16, 22, 29, 0.95); z-index: 5;
+    display: flex; flex-direction: column; justify-content: center; padding: 6px; box-sizing: border-box; gap: 6px;
+}
+.btn-action-menu {
+    background: rgba(45, 56, 70, 0.9); border: 1px solid #3e4d5e; color: #fff;
+    font-size: 9px; padding: 6px 2px; border-radius: 3px; cursor: pointer; text-align: center;
+}
+.btn-action-menu:hover { background: #e39d39; color: #000; }
 
-/* Interfaz de "Mis Datos" */
-.profile-card { background: #293139; padding: 15px; border-radius: 6px; }
-.profile-header-box { text-align: center; margin-bottom: 20px; }
-.main-avatar-container { width: 120px; height: 120px; margin: 0 auto; border-radius: 6px; overflow: hidden; border: 2px solid #3a4652; }
-.main-avatar-container img { width: 100%; height: 100%; object-fit: cover; }
-.profile-username { font-size: 20px; margin: 10px 0 0 0; color: #fff; font-weight: normal; }
-.edit-text { font-size: 12px; color: #4eb0b0; margin-left: 5px; cursor: pointer; font-weight: bold; }
-.sub-title-profile { font-size: 15px; color: #fff; font-weight: normal; margin-bottom: 10px; }
-.stats-panel { display: flex; gap: 15px; background: #1f252b; padding: 12px; border-radius: 4px; align-items: center; }
-.rank-icon { width: 52px; height: auto; }
-.stats-text-box p { margin: 4px 0; font-size: 13px; color: #cbd4db; }
-.stat-val { font-weight: bold; color: #fff; }
+/* Perfil Elegante */
+.profile-card { background: #26303c; padding: 16px; border-radius: 6px; border: 1px solid #2d3846; }
+.profile-header-box { text-align: center; margin-bottom: 15px; position: relative; }
+.user-tag-title {
+    background: #364453; color: #fff; font-size: 12px; font-weight: bold;
+    padding: 4px 0; width: 100%; border-radius: 3px; margin-bottom: 12px; letter-spacing: 1px;
+}
+.main-avatar-container {
+    width: 170px; height: 245px; margin: 0 auto; border-radius: 6px;
+    overflow: hidden; border: 2px solid #e39d39; background: #161b22;
+    box-shadow: 0 0 15px rgba(227, 157, 57, 0.2);
+}
+.no-avatar-msg { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 11px; color: #57626e; text-align: center; padding: 10px; }
 
-/* Barra de experiencia / medalla */
+.profile-username { font-size: 22px; margin: 12px 0 0 0; color: #fff; font-weight: bold; }
+.edit-text { font-size: 12px; color: #8393a2; margin-left: 6px; cursor: pointer; font-weight: normal; }
+
+.stats-panel { display: flex; gap: 16px; background: #181d24; padding: 14px; border-radius: 4px; align-items: center; margin-top: 10px; }
+.rank-badge-box { display: flex; justify-content: center; align-items: center; }
+.rank-icon { width: 64px; height: auto; filter: drop-shadow(0 2px 6px rgba(162,57,227,0.4)); }
+.stats-text-box p { margin: 5px 0; font-size: 13px; color: #a2afbc; }
+.stat-val { font-weight: bold; color: #fff; font-family: monospace; font-size: 14px; }
+
+/* Barra de experiencia */
 .progress-section { margin-top: 15px; }
-.progress-txt { font-size: 12px; color: #cbd4db; margin-bottom: 5px; }
-.bar-container { background: #111; height: 12px; border-radius: 6px; overflow: hidden; }
-.bar-fill { background: #5cb85c; height: 100%; width: 0%; transition: width 0.4s; }
+.progress-txt { font-size: 12px; color: #8393a2; margin-bottom: 6px; }
+.bar-container { background: #0d1117; height: 14px; border-radius: 7px; overflow: hidden; border: 1px solid #2d3846; }
+.bar-fill { background: linear-gradient(90deg, #e39d39, #f3be7a); height: 100%; width: 0.15%; transition: width 0.5s; }
 
-/* Registro Inicial */
-.username-input {
-    width: 80%; padding: 8px; margin: 15px 0;
-    background: #1f252b; border: 1px solid #4eb0b0;
-    color: #fff; text-align: center; border-radius: 4px;
-}
-
-/* Cuadrícula del Álbum */
-.gems-counter-row { display: flex; justify-content: space-around; background: #2c373e; padding: 10px; font-size: 13px; font-weight: bold; border-radius: 4px; margin-bottom: 15px; }
-.album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-
-/* Modal global */
+/* Modal */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; }
-.modal-content { background: #293139; padding: 20px; border-radius: 6px; text-align: center; max-width: 260px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.modal-content { background: #26303c; padding: 20px; border-radius: 6px; text-align: center; max-width: 260px; width: 100%; display: flex; flex-direction: column; align-items: center; border: 1px solid #3c4b5e; }
