@@ -1,0 +1,99 @@
+body {
+    background-color: #222930;
+    color: #e0e5ea;
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+}
+
+/* Navegación */
+.top-nav {
+    background-color: #2c373e;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #232b31;
+    position: sticky; top: 0; z-index: 10;
+}
+.nav-item {
+    background: none; border: none;
+    color: #92a1a9; font-size: 14px; font-weight: bold;
+    padding: 15px 10px; cursor: pointer; width: 100%; text-align: center;
+}
+.nav-item.active {
+    color: #4eb0b0; border-bottom: 3px solid #4eb0b0;
+}
+
+.content-container {
+    padding: 16px; max-width: 450px; margin: 0 auto;
+}
+.hidden { display: none !important; }
+
+/* Estilos de los Cofres */
+.section-chest { margin-bottom: 30px; }
+.title-chest { font-size: 17px; color: #ffffff; margin: 0 0 5px 0; font-weight: normal;}
+.arrow { color: #4eb0b0; margin-right: 4px; }
+.event-tag { color: #5bc0de; }
+.bullet-list { list-style: none; padding: 0; margin: 0 0 15px 0; font-size: 13px; color: #cbd4db; }
+.bullet-list li { margin-bottom: 3px; }
+
+/* Maquetación de Cromos */
+.cards-row { display: flex; gap: 8px; margin-bottom: 15px; }
+.card-preview {
+    background-color: #d1d5db; width: 85px; height: 135px;
+    border: 1px solid #000; border-radius: 2px;
+    display: flex; flex-direction: column; overflow: hidden;
+}
+.card-header { font-size: 9px; font-weight: bold; text-align: center; padding: 2px 0; color: #000; }
+.card-header.raro { background-color: #a8c3d4; }
+.card-header.comun { background-color: #e2a057; }
+.card-header.epico { background-color: #f0ad4e; }
+
+.card-img-box { flex: 1; background: #fff; }
+.card-img-box img { width: 100%; height: 100%; object-fit: cover; }
+.card-footer {
+    background-color: #222930; color: #fff; font-size: 9px;
+    text-align: center; padding: 4px 1px; min-height: 20px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* Cartas de Misterio */
+.card-preview.mystery { background-color: #b0b8c1; }
+.mystery-sign { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 50px; color: #000; font-weight: bold; }
+
+.availability-badge {
+    background-color: #0f1317; border: 1px solid #3a4652; color: #4eb0b0;
+    padding: 4px 12px; font-size: 13px; border-radius: 3px; width: fit-content; margin: 0 auto 12px auto;
+}
+.chest-display { display: flex; justify-content: center; margin-bottom: 15px; }
+.main-chest-img { width: 140px; height: auto; }
+
+.btn-open {
+    background-color: #5cb85c; color: #000; border: none;
+    width: 100%; padding: 10px 0; font-size: 15px; font-weight: bold; border-radius: 3px; cursor: pointer;
+}
+.btn-open:disabled { background-color: #464f58; color: #78828c; cursor: not-allowed; }
+
+/* Vista Perfil */
+.profile-card { background: #293139; padding: 15px; border-radius: 6px; }
+.profile-header-box { text-align: center; margin-bottom: 20px; }
+.main-avatar-container { width: 120px; height: 120px; margin: 0 auto; border-radius: 6px; overflow: hidden; border: 2px solid #3a4652; }
+.main-avatar-container img { width: 100%; height: 100%; object-fit: cover; }
+.profile-username { font-size: 20px; margin: 10px 0 0 0; color: #fff; font-weight: normal; }
+.edit-text { font-size: 12px; color: #78828c; margin-left: 5px; cursor: pointer; }
+.sub-title-profile { font-size: 15px; color: #fff; font-weight: normal; margin-bottom: 10px; }
+.stats-panel { display: flex; gap: 15px; background: #1f252b; padding: 12px; border-radius: 4px; align-items: center; }
+.rank-icon { width: 50px; height: auto; }
+.stats-text-box p { margin: 4px 0; font-size: 13px; color: #cbd4db; }
+.stat-val { font-weight: bold; color: #fff; }
+
+.progress-section { margin-top: 15px; }
+.progress-txt { font-size: 12px; color: #cbd4db; margin-bottom: 5px; }
+.bar-container { background: #111; height: 12px; border-radius: 6px; overflow: hidden; }
+.bar-fill { background: #5cb85c; height: 100%; width: 0%; transition: width 0.4s; }
+
+/* Vista Álbum */
+.gems-counter-row { display: flex; justify-content: space-around; background: #2c373e; padding: 10px; font-size: 13px; font-weight: bold; border-radius: 4px; margin-bottom: 15px; }
+.album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+/* Ventana emergente Modal */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; }
+.modal-content { background: #293139; padding: 20px; border-radius: 6px; text-align: center; max-width: 260px; width: 100%; display: flex; flex-direction: column; align-items: center; }
