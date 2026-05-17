@@ -1,42 +1,41 @@
 // =========================================================================
-//  1. CONFIGURACIÓN AUTOMÁTICA POR NÚMEROS (GACHA SEKAI)
+//  1. CONFIGURACIÓN AUTOMÁTICA POR NÚMEROS (SEKAI CHRONICLES)
 // =========================================================================
 
-// 👇 ¡ESTE ES EL ÚNICO NÚMERO QUE TOCARÁS! 
-// Cambiando este número el juego creará, registrará y te dará las cartas en automático.
-const TOTAL_FOTOS_SUBIDAS = 3; 
+// 👇 Cambia este número según la cantidad de fotos que tengas en tu carpeta img/
+const TOTAL_FOTOS_SUBIDAS = 9; 
 
-// Generador inteligente de la lista de cromos usando tus números
+// Generador inteligente de cromos
 const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SUBIDAS }, (_, index) => {
     const numero = index + 1;
     
-    // Asigna rarezas automáticas (Común, Raro, Épico) para darle emoción
+    // Distribuye rarezas automáticamente para el diseño de las tarjetas
     let rarezaCard = "comun";
     if (numero % 3 === 0) rarezaCard = "epico";
     else if (numero % 2 === 0) rarezaCard = "raro";
 
     return {
         id: numero,
-        obra: "Colección Sekai",
+        obra: "Manhwa Colección",
         nombre: `Cromo #${numero}`,
         rareza: rarezaCard,
-        img: `img/${numero}.png` // Busca automáticamente en tu carpeta img/1.png, img/2.png, etc.
+        img: `img/${numero}.png` // Busca automáticamente: img/1.png, img/2.png, etc.
     };
 });
 
-// Genera la lista de IDs para que el jugador tenga desbloqueadas todas las que subas
+// Desbloquea en automático todas las fotos para la lista del usuario
 const listaIdsAutomaticos = Array.from({ length: TOTAL_FOTOS_SUBIDAS }, (_, i) => i + 1);
 
 // =========================================================================
-//  2. ESTRUCTURA DE DATOS DEL USUARIO
+//  2. ESTRUCTURA DE DATOS INTERNA (YUKI)
 // =========================================================================
 let usuario = {
     nombre: "yuki",
-    puntos: 3000,             
-    misionesCompletadas: 7,
-    g_comun: 10, g_rara: 0, g_epica: 0,
-    disponiblesEvento: 2,
-    disponiblesDiario: 1,
+    puntos: 786,               
+    misionesCompletadas: 7,   
+    gemas: 10,
+    gemasRaras: 0,
+    gemasEpicas: 0,
     misCromosIds: listaIdsAutomaticos, 
     avatarCromoId: 1,         
     ultimoReinicioDia: ""
@@ -50,17 +49,19 @@ const viewCofres = document.getElementById('view-cofres');
 const viewPerfil = document.getElementById('view-perfil');
 const viewCromos = document.getElementById('view-cromos');
 
+// ID de la carta que tiene el menú abierto actualmente
+let cardMenuAbiertoId = null;
+
 // =========================================================================
-//  3. NÚCLEO DEL JUEGO (INICIALIZACIÓN)
+//  3. INICIALIZACIÓN DEL SISTEMA
 // =========================================================================
 function iniciarSistema() {
     const guardado = localStorage.getItem('sekai_chronicles_save');
     const pantallaBienvenida = document.getElementById('welcome-screen');
 
-    // Si ya entró antes, respeta sus datos y oculta la bienvenida
     if (guardado) { 
         usuario = JSON.parse(guardado); 
-        // Actualiza la lista automática por si subiste nuevas fotos mientras no estaba
+        // Sincroniza fotos nuevas automáticamente si se agregaron más a GitHub
         listaIdsAutomaticos.forEach(id => {
             if (!usuario.misCromosIds.includes(id)) usuario.misCromosIds.push(id);
         });
@@ -69,7 +70,7 @@ function iniciarSistema() {
         if (pantallaBienvenida) pantallaBienvenida.classList.remove('hidden');
     }
     
-    // Coloca imágenes estables de respaldo para los cofres de la tienda
+    // Mantiene las imágenes de los cofres estables
     const chestImg1 = document.querySelector('.main-chest-img');
     if(chestImg1) chestImg1.src = "https://cdn-icons-png.flaticon.com/512/3082/3082031.png";
     
@@ -82,21 +83,6 @@ function iniciarSistema() {
     actualizarPerfilVisual();
 }
 
-// Registro de nuevos usuarios
-if(document.getElementById('btn-crear-usuario')) {
-    document.getElementById('btn-crear-usuario').addEventListener('click', () => {
-        const nombreInput = document.getElementById('input-nuevo-usuario').value.trim();
-        if (nombreInput === "") { alert("¡Pon un nombre!"); return; }
-        usuario.nombre = nombreInput;
-        usuario.puntos = 3000; // Regalo de bienvenida
-        usuario.misCromosIds = listaIdsAutomaticos;
-        document.getElementById('welcome-screen').classList.add('hidden');
-        guardarYActualizar();
-        actualizarPerfilVisual();
-    });
-}
-
-// Generador del Carrusel Horizontal Superior
 function generarCarruselAutomatico() {
     const track = document.getElementById('carrusel-dinamico');
     if (track) {
@@ -111,83 +97,61 @@ function generarCarruselAutomatico() {
     }
 }
 
-// Control de los temporizadores diarios
 function comprobarReinicioTiempo() {
     const hoy = new Date().toDateString();
     if (usuario.ultimoReinicioDia !== hoy) {
-        usuario.disponiblesEvento = 2;
-        usuario.disponiblesDiario = 1;
         usuario.ultimoReinicioDia = hoy;
         guardarYActualizar();
     }
 }
 
-setInterval(() => {
-    if(document.getElementById('timer-evento')) document.getElementById('timer-evento').textContent = "Siguiente reinicio en: 23:59:00";
-    if(document.getElementById('timer-diario')) document.getElementById('timer-diario').textContent = "Siguiente reinicio en: 23:59:00";
-}, 1000);
-
 // =========================================================================
-//  4. CONTROL DE PESTAÑAS (NAVEGACIÓN)
+//  4. SISTEMA DE NAVEGACIÓN ENTRE PESTAÑAS
 // =========================================================================
-btnTabCofres.addEventListener('click', () => cambiarPestaña(btnTabCofres, viewCofres));
-btnTabPerfil.addEventListener('click', () => { cambiarPestaña(btnTabPerfil, viewPerfil); actualizarPerfilVisual(); });
-btnTabCromos.addEventListener('click', () => { cambiarPestaña(btnTabCromos, viewCromos); renderizarAlbum(); });
+if(btnTabCofres) btnTabCofres.addEventListener('click', () => cambiarPestaña(btnTabCofres, viewCofres));
+if(btnTabPerfil) btnTabPerfil.addEventListener('click', () => { cambiarPestaña(btnTabPerfil, viewPerfil); actualizarPerfilVisual(); });
+if(btnTabCromos) btnTabCromos.addEventListener('click', () => { cambiarPestaña(btnTabCromos, viewCromos); renderizarAlbum(); });
 
 function cambiarPestaña(boton, vista) {
-    [btnTabCofres, btnTabPerfil, btnTabCromos].forEach(b => b.classList.remove('active'));
-    [viewCofres, viewPerfil, viewCromos].forEach(v => v.classList.add('hidden'));
-    boton.classList.add('active'); vista.classList.remove('hidden');
+    [btnTabCofres, btnTabPerfil, btnTabCromos].forEach(b => { if(b) b.classList.remove('active'); });
+    [viewCofres, viewPerfil, viewCromos].forEach(v => { if(v) v.classList.add('hidden'); });
+    if(boton) boton.classList.add('active'); 
+    if(vista) vista.classList.remove('hidden');
+    cardMenuAbiertoId = null; // Cierra menús al cambiar de pestaña
 }
 
-// =========================================================================
-//  5. BOTONES DE ACCIÓN (MAZMORRAS Y TIENDA GACHA)
-// =========================================================================
-document.getElementById('btn-hacer-mision').addEventListener('click', () => {
-    usuario.puntos += 25;
-    usuario.misionesCompletadas++;
-    guardarYActualizar();
-    actualizarPerfilVisual();
-    alert("¡Mazmorra superada! +25 Puntos de Alma");
-});
-
-document.getElementById('btn-abrir-evento').addEventListener('click', () => {
-    if (usuario.puntos >= 500) {
-        usuario.puntos -= 500;
-        const randomCard = TODOS_LOS_CROMOS[Math.floor(Math.random() * TODOS_LOS_CROMOS.length)];
-        if (!usuario.misCromosIds.includes(randomCard.id)) usuario.misCromosIds.push(randomCard.id);
+// Botón de Mazmorra
+const btnMision = document.getElementById('btn-hacer-mision');
+if(btnMision) {
+    btnMision.addEventListener('click', () => {
+        usuario.puntos += 25;
+        usuario.misionesCompletadas++;
         guardarYActualizar();
-        alert(`¡Invocaste a: ${randomCard.nombre}!`);
-    } else { alert("Puntos insuficientes de Alma."); }
-});
-
-document.getElementById('btn-abrir-diario').addEventListener('click', () => {
-    if (usuario.puntos >= 1000) {
-        usuario.puntos -= 1000;
-        const randomCard = TODOS_LOS_CROMOS[Math.floor(Math.random() * TODOS_LOS_CROMOS.length)];
-        if (!usuario.misCromosIds.includes(randomCard.id)) usuario.misCromosIds.push(randomCard.id);
-        guardarYActualizar();
-        alert(`¡Invocación Épica: ${randomCard.nombre}!`);
-    } else { alert("Puntos insuficientes de Alma."); }
-});
+        actualizarPerfilVisual();
+        alert("¡Mazmorra superada! +25 Puntos de Alma");
+    });
+}
 
 function guardarYActualizar() {
-    if(document.getElementById('badge-evento')) document.getElementById('badge-evento').textContent = `${usuario.disponiblesEvento} Cofres Disponibles`;
-    if(document.getElementById('badge-diario')) document.getElementById('badge-diario').textContent = `${usuario.disponiblesDiario} Cofre Disponible`;
     localStorage.setItem('sekai_chronicles_save', JSON.stringify(usuario));
 }
 
 // =========================================================================
-//  6. RENDERIZADO VISUAL DEL PERFIL Y EL ÁLBUM 3D
+//  5. INTERFACES VISUALES Y MENÚ INTERACTIVO (VENDER / AVATAR)
 // =========================================================================
 function actualizarPerfilVisual() {
-    document.getElementById('display-username').textContent = usuario.nombre;
-    document.getElementById('stats-misiones').textContent = usuario.misionesCompletadas;
-    document.getElementById('profile-points-count').textContent = usuario.puntos;
-    document.getElementById('profile-card-count').textContent = `${usuario.misCromosIds.length}/300`;
+    const elUser = document.getElementById('display-username');
+    const elMisiones = document.getElementById('stats-misiones');
+    const elPuntos = document.getElementById('profile-points-count');
+    const elCromos = document.getElementById('profile-card-count');
+
+    if(elUser) elUser.textContent = usuario.nombre;
+    if(elMisiones) elMisiones.textContent = usuario.misionesCompletadas;
+    if(elPuntos) elPuntos.textContent = usuario.puntos;
+    if(elCromos) elCromos.textContent = `${usuario.misCromosIds.length}/300`;
     
     const contenedorAvatar = document.getElementById('profile-avatar-display');
-    if (usuario.avatarCromoId) {
+    if (contenedorAvatar && usuario.avatarCromoId) {
         const infoCromo = TODOS_LOS_CROMOS.find(c => c.id === usuario.avatarCromoId);
         if (infoCromo) {
             contenedorAvatar.innerHTML = `
@@ -199,7 +163,7 @@ function actualizarPerfilVisual() {
             return;
         }
     }
-    contenedorAvatar.innerHTML = `<div class="no-avatar-msg">Elige un avatar en tus Cromos</div>`;
+    if(contenedorAvatar) contenedorAvatar.innerHTML = `<div class="no-avatar-msg">Selecciona un Cromo en tu Álbum</div>`;
 }
 
 function renderizarAlbum() {
@@ -209,22 +173,63 @@ function renderizarAlbum() {
     
     usuario.misCromosIds.forEach(id => {
         const cromo = TODOS_LOS_CROMOS.find(c => c.id === id);
-        if (cromo) {
-            grid.innerHTML += `
-                <div class="card-container-relative">
-                    <div class="card-preview">
-                        <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
-                        <div class="card-img-box">
-                            <img src="${cromo.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1041/1041446.png'">
-                        </div>
-                        <div class="card-footer">
-                            <b>${cromo.nombre}</b>
-                        </div>
+        if (!cromo) return;
+
+        const esMenuAbierto = cardMenuAbiertoId === id;
+
+        // Genera el bloque de la carta estructurado
+        grid.innerHTML += `
+            <div class="card-container-relative" onclick="toggleMenuCarta(${cromo.id}, event)">
+                <div class="card-preview">
+                    <div class="card-header-action">${esMenuAbierto ? '-' : '+'}</div>
+                    <div class="card-img-box">
+                        <img src="${cromo.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1041/1041446.png'">
                     </div>
-                </div>`;
-        }
+                    <div class="card-footer">
+                        <b>${cromo.nombre}</b>
+                    </div>
+                    
+                    <div class="card-hover-menu ${esMenuAbierto ? 'visible' : 'hidden'}">
+                        <button class="menu-option-btn color-vender" onclick="accionVender(${cromo.id}, event)">Vender (500 exp.)</button>
+                        <button class="menu-option-btn color-avatar" onclick="accionDefinirAvatar(${cromo.id}, event)">Establecer de Avatar</button>
+                        <button class="menu-option-btn color-gema" onclick="accionUsarGema(${cromo.id}, event)">Usar Gema Rara</button>
+                    </div>
+                </div>
+            </div>`;
     });
 }
 
-// ¡Arrancamos el motor del juego!
+// Acciones interactivos del menú flotante
+window.toggleMenuCarta = function(id, event) {
+    // Si se hizo clic en un botón interno del menú, no cerrar ni reabrir nada
+    if (event.target.classList.contains('menu-option-btn')) return;
+    
+    cardMenuAbiertoId = (cardMenuAbiertoId === id) ? null : id;
+    renderizarAlbum();
+};
+
+window.accionVender = function(id, event) {
+    event.stopPropagation();
+    alert(`¡Tarjeta #${id} vendida con éxito! +500 EXP.`);
+    cardMenuAbiertoId = null;
+    renderizarAlbum();
+};
+
+window.accionDefinirAvatar = function(id, event) {
+    event.stopPropagation();
+    usuario.avatarCromoId = id;
+    guardarYActualizar();
+    alert(`¡Cromo #${id} establecido como tu foto de perfil!`);
+    cardMenuAbiertoId = null;
+    renderizarAlbum();
+};
+
+window.accionUsarGema = function(id, event) {
+    event.stopPropagation();
+    alert(`Has usado una Gema Rara en el cromo #${id}.`);
+    cardMenuAbiertoId = null;
+    renderizarAlbum();
+};
+
+// Arranca el juego con los sistemas completos
 iniciarSistema();
