@@ -1,5 +1,5 @@
 // =========================================================================
-//  1. COMENTARIOS Y DECLARACIÓN DE CARTAS REALES
+//  1. DECLARACIÓN DE CROMOS BASE Y SISTEMA
 // =========================================================================
 const DATOS_RAICES_CROMOS = [
     { id: 1, nombre: "Molly, Estrella de las Arenas", rareza: "epico", img: "img/1.png" },
@@ -8,7 +8,6 @@ const DATOS_RAICES_CROMOS = [
     { id: 4, nombre: "Molly, Guardiana Espiritual", rareza: "comun", img: "img/4.png" }
 ];
 
-// Cantidad máxima total de cartas añadidas a tu juego
 const TOTAL_FOTOS_SISTEMA = 12;
 
 const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SISTEMA }, (_, index) => {
@@ -25,7 +24,7 @@ const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SISTEMA }, (_, index) 
 });
 
 // =========================================================================
-//  2. ESTADO INICIAL DEL JUGADOR
+//  2. ESTADO INICIAL DEL USUARIO
 // =========================================================================
 let usuario = {
     nombre: "yuki",
@@ -34,13 +33,13 @@ let usuario = {
     gemas: 10,
     gemasRaras: 0,
     gemasEpicas: 0,
-    misCromosIds: [1, 2, 3, 4], // Inventario real de inicio
+    misCromosIds: [1, 2, 3, 4], 
     avatarCromoId: 1
 };
 
 let cardMenuAbiertoId = null;
 
-// Selectores del DOM
+// Referencias del DOM
 const btnTabCofres = document.getElementById('tab-btn-cofres');
 const btnTabPerfil = document.getElementById('tab-btn-perfil');
 const btnTabCromos = document.getElementById('tab-btn-cromos');
@@ -49,7 +48,7 @@ const viewPerfil = document.getElementById('view-perfil');
 const viewCromos = document.getElementById('view-cromos');
 
 // =========================================================================
-//  3. CONTROLADORES PRINCIPALES Y LOGS
+//  3. INICIALIZACIÓN Y NAVEGACIÓN
 // =========================================================================
 function iniciarJuego() {
     const guardadoLocal = localStorage.getItem('sekai_chronicles_save');
@@ -57,7 +56,7 @@ function iniciarJuego() {
         usuario = JSON.parse(guardadoLocal);
     }
 
-    // Editar Nombre de Usuario
+    // Evento de Editar Nombre
     const btnEditar = document.getElementById('btn-editar-nombre');
     if (btnEditar) {
         btnEditar.addEventListener('click', (e) => {
@@ -72,7 +71,7 @@ function iniciarJuego() {
         });
     }
 
-    // Sistema de Mazmorras
+    // Botón de Mazmorra
     const btnMision = document.getElementById('btn-hacer-mision');
     if (btnMision) {
         btnMision.onclick = () => {
@@ -84,7 +83,7 @@ function iniciarJuego() {
         };
     }
 
-    // Enlaces de Navegación de Pestañas
+    // Enlaces de Navegación
     if (btnTabCofres) btnTabCofres.onclick = () => alternarVistas(btnTabCofres, viewCofres);
     if (btnTabPerfil) btnTabPerfil.onclick = () => { alternarVistas(btnTabPerfil, viewPerfil); actualizarPerfilVisual(); };
     if (btnTabCromos) btnTabCromos.onclick = () => { alternarVistas(btnTabCromos, viewCromos); renderizarAlbumCompleto(); };
@@ -131,7 +130,7 @@ function generarMiniCarrusel() {
 }
 
 // =========================================================================
-//  4. EJECUCIÓN GACHA DE LOS COFRES
+//  4. SISTEMA DE APERTURA GACHA (COFRES)
 // =========================================================================
 const btnAbrirEvento = document.getElementById('btn-abrir-evento');
 const btnAbrirDiario = document.getElementById('btn-abrir-diario');
@@ -175,10 +174,12 @@ function desplegarModalInvocacion(cromo) {
 
     if (modal && cuerpo) {
         cuerpo.innerHTML = `
-            <div class="card-container-relative" style="max-width: 140px; margin: 10px auto;">
+            <div class="card-container-relative" style="max-width: 130px; margin: 10px auto;">
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
-                    <div class="card-img-box"><img src="${cromo.img}"></div>
+                    <div class="card-img-box">
+                        <img src="${cromo.img}" onerror="this.remove();">
+                    </div>
                     <div class="card-footer"><b>${cromo.nombre}</b></div>
                 </div>
             </div>`;
@@ -188,7 +189,7 @@ function desplegarModalInvocacion(cromo) {
 }
 
 // =========================================================================
-//  5. RENDERIZADO DEL INVENTARIO REAL
+//  5. CONTROLADORES DE RENDERIZADO VISUAL
 // =========================================================================
 function actualizarPerfilVisual() {
     const domUser = document.getElementById('display-username');
@@ -213,7 +214,9 @@ function actualizarPerfilVisual() {
             cajaAvatar.innerHTML = `
                 <div class="card-preview">
                     <div class="card-header ${infoAvatar.rareza}">${infoAvatar.rareza.toUpperCase()}</div>
-                    <div class="card-img-box"><img src="${infoAvatar.img}"></div>
+                    <div class="card-img-box">
+                        <img src="${infoAvatar.img}" onerror="this.remove();">
+                    </div>
                     <div class="card-footer"><b>${infoAvatar.nombre}</b></div>
                 </div>`;
         }
@@ -225,12 +228,12 @@ function renderizarAlbumCompleto() {
     if (!grid) return;
     grid.innerHTML = '';
 
-    // CONDICIÓN IMPORTANTE: Renderiza solo las cartas compradas/ganadas por el ID del usuario
+    // Filtrar cromos en posesión del jugador
     const misCromosReales = TODOS_LOS_CROMOS.filter(cromo => usuario.misCromosIds.includes(cromo.id));
     misCromosReales.sort((a, b) => a.id - b.id);
 
     if (misCromosReales.length === 0) {
-        grid.innerHTML = `<div style="grid-column: span 3; text-align:center; color:#62717e; padding:20px;">Álbum vacío.</div>`;
+        grid.innerHTML = `<div style="grid-column: span 3; text-align:center; color:#62717e; padding:20px;">Tu álbum está vacío.</div>`;
         return;
     }
 
@@ -242,7 +245,7 @@ function renderizarAlbumCompleto() {
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
                     <div class="card-img-box">
-                        <img src="${cromo.img}" onerror="this.style.opacity='0'; this.style.visibility='hidden';">
+                        <img src="${cromo.img}" alt="${cromo.nombre}" onerror="this.remove();">
                     </div>
                     <div class="card-footer"><b>${cromo.nombre}</b></div>
                     
