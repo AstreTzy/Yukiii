@@ -51,19 +51,21 @@
                 <div class="profile-header-box">
                     <div class="user-tag-title">USUARIO</div>
                     <div class="main-avatar-container" id="profile-avatar-display">
-                        <div class="no-avatar-msg">Selecciona un Cromo en tu Álbum</div>
-                    </div>
-                    <h1 class="profile-username"><span id="display-username">Pepinito</span> <span class="edit-text" id="btn-editar-nombre">Editar</span></h1>
+                        </div>
+                    <h1 class="profile-username">
+                        <span id="display-username">yuki</span> 
+                        <span class="edit-text" id="btn-editar-nombre">Editar</span>
+                    </h1>
                 </div>
 
                 <h3 class="sub-title-profile"><span class="arrow">❯</span> Mis Estadísticas:</h3>
                 <div class="stats-panel">
                     <div class="rank-badge-box">
-                        <img src="https://cdn-icons-png.flaticon.com/512/4781/4781517.png" class="rank-icon" id="rank-medal-icon" alt="Medalla Rango">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4781/4781517.png" class="rank-icon" alt="Medalla Rango">
                     </div>
                     <div class="stats-text-box">
                         <p>Caps Subidos: <span class="stat-val">0</span></p>
-                        <p>Cromos: <span class="stat-val" id="profile-card-count">0/300</span></p>
+                        <p>Cromos: <span class="stat-val" id="profile-card-count">0/12</span></p>
                         <p>Puntos: <span class="stat-val" id="profile-points-count">0</span></p>
                     </div>
                 </div>
@@ -93,32 +95,13 @@
 
     <div id="reward-modal" class="modal hidden">
         <div class="modal-content">
-            <h2 id="modal-title" style="color: #e39d39;">¡RECOMPENSA!</h2>
+            <h2 id="modal-title" style="color: #e39d39; margin-bottom: 5px;">¡RECOMPENSA!</h2>
             <div id="modal-body-content"></div>
             <button class="btn-open" id="btn-cerrar-modal" style="margin-top:20px; max-width:150px;">Aceptar</button>
         </div>
     </div>
 
-    <div id="welcome-screen" class="modal hidden">
-        <div class="modal-content" style="max-width: 320px;">
-            <h2 style="color: #e39d39; margin-top: 0; letter-spacing: 1px;">✨ ¡NUEVO VIAJERO! ✨</h2>
-            <p style="font-size: 13px; color: #cbd4db; margin-bottom: 20px; line-height: 1.4;">
-                Bienvenido a <b>Sekai Chronicles</b>. Registra tu nick para recibir tu regalo de iniciación cósmica.
-            </p>
-            
-            <div style="width: 100%; text-align: left; margin-bottom: 15px;">
-                <label style="font-size: 11px; color: #8393a2; font-weight: bold; display: block; margin-bottom: 5px;">NICKNAME:</label>
-                <input type="text" id="input-nuevo-usuario" placeholder="Ej. Pepinito" style="width: 100%; padding: 11px; background: #161b22; border: 1px solid #3c4b5e; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 14px; outline: none;">
-            </div>
-
-            <div style="background: rgba(92, 184, 92, 0.1); border: 1px solid #5cb85c; border-radius: 4px; padding: 12px; margin-bottom: 20px; width: 100%; box-sizing: border-box; text-align: center;">
-                <span style="color: #5cb85c; font-weight: bold; font-size: 12px; display: block; margin-bottom: 2px;">🎁 REGALO:</span>
-                <span style="font-size: 16px; color: #fff; font-weight: bold; font-family: monospace;">+3,000 Puntos</span>
-            </div>
-
-            <button class="btn-open" id="btn-crear-usuario" style="background: linear-gradient(180deg, #5cb85c 0%, #449d44 100%); border-color: #398439; font-size: 14px;">Reclamar Bono</button>
-        </div>
-    </div>
+    <div id="epic-notification" class="epic-toast">⚔️ ¡MAZMORRA SUPERADA!</div>
 
     <script src="app.js"></script>
 </body>
