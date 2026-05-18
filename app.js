@@ -2,14 +2,14 @@
 //  1. CONFIGURACIÓN DE CROMOS REALES (Probabilidades y Atributos)
 // =========================================================================
 
-// Cantidad real de imágenes en tu carpeta img/
+// 👇 Cantidad real de imágenes en tu carpeta img/
 const TOTAL_FOTOS_SUBIDAS = 13; 
 
 // Base de datos de tus cromos indexados por número
 const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SUBIDAS }, (_, index) => {
     const numero = index + 1;
     
-    // Asignación de rarezas basada en la estructura de tu juego
+    // Asignación automática de rarezas
     let rarezaCard = "comun";
     if (numero % 3 === 0) rarezaCard = "epico";
     else if (numero % 2 === 0) rarezaCard = "raro";
@@ -23,7 +23,7 @@ const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SUBIDAS }, (_, index) 
 });
 
 // =========================================================================
-//  2. ESTRUCTURA DE DATOS INTERNA DEL JUGADOR (Sincronizada con tus capturas)
+//  2. ESTRUCTURA DE DATOS INTERNA DEL JUGADOR
 // =========================================================================
 let usuario = {
     nombre: "Pepinito",
@@ -32,14 +32,14 @@ let usuario = {
     gemas: 10,
     gemasRaras: 0,
     gemasEpicas: 0,
-    misCromosIds: [1, 2, 3, 4, 5, 6, 7], // Cromos iniciales desbloqueados
-    avatarCromoId: 6,         // ID del cromo de Rani (Diamond) que tienes de perfil
+    misCromosIds: [1, 2, 3, 4, 5, 6, 7], // Inventario Inicial
+    avatarCromoId: 6,                     // ID del avatar por defecto
     ultimoReinicioDia: ""
 };
 
 let cardMenuAbiertoId = null;
 
-// Elementos del DOM para las Pestañas
+// Elementos de Interfaz (DOM)
 const btnTabCofres = document.getElementById('tab-btn-cofres');
 const btnTabPerfil = document.getElementById('tab-btn-perfil');
 const btnTabCromos = document.getElementById('tab-btn-cromos');
@@ -61,7 +61,7 @@ function iniciarSistema() {
         if (pantallaBienvenida) pantallaBienvenida.classList.remove('hidden');
     }
     
-    // Configurar el botón de bienvenida si el usuario es nuevo
+    // Registro de nuevo usuario
     const btnCrearUsuario = document.getElementById('btn-crear-usuario');
     const inputNuevoUsuario = document.getElementById('input-nuevo-usuario');
     if (btnCrearUsuario && inputNuevoUsuario) {
@@ -75,7 +75,7 @@ function iniciarSistema() {
         });
     }
 
-    // Vincular los botones de abrir cofres que tienes en el HTML
+    // Enlace de los botones de Invocación
     const btnAbrirEvento = document.getElementById('btn-abrir-evento');
     const btnAbrirDiario = document.getElementById('btn-abrir-diario');
     
@@ -90,7 +90,6 @@ function guardarYActualizar() {
     localStorage.setItem('sekai_chronicles_save', JSON.stringify(usuario));
 }
 
-// Genera la vista previa en movimiento del Banner
 function generarCarruselAutomatico() {
     const track = document.getElementById('carrusel-dinamico');
     if (track) {
@@ -106,37 +105,30 @@ function generarCarruselAutomatico() {
 }
 
 // =========================================================================
-//  4. SISTEMA GACHA (APERTURA DE COFRES Y RECOMPENSAS)
+//  4. SISTEMA GACHA (INVOCACIÓN)
 // =========================================================================
 function abrirCofre(tipoCofre, costo) {
     if (usuario.puntos < costo) {
-        alert("❌ No tienes suficientes Puntos de Alma.");
+        alert("❌ No tienes suficientes Puntos.");
         return;
     }
 
-    // Descontar puntos
     usuario.puntos -= costo;
 
-    // Sistema de Probabilidades Gacha
     let rarezaObtenida = "comun";
     const rand = Math.random() * 100;
 
     if (tipoCofre === 'diario') {
-        // Cofre Épico: Mejores probabilidades
-        if (rand < 25) rarezaObtenida = "epico";       // 25% Épico
-        else if (rand < 65) rarezaObtenida = "raro";   // 40% Raro
+        if (rand < 25) rarezaObtenida = "epico";       
+        else if (rand < 65) rarezaObtenida = "raro";   
     } else {
-        // Cofre Evento Estándar
-        if (rand < 10) rarezaObtenida = "epico";       // 10% Épico
-        else if (rand < 40) rarezaObtenida = "raro";   // 30% Raro
+        if (rand < 10) rarezaObtenida = "epico";       
+        else if (rand < 40) rarezaObtenida = "raro";   
     }
 
-    // Filtrar cartas que correspondan a esa rareza
     const poolCartas = TODOS_LOS_CROMOS.filter(c => c.rareza === rarezaObtenida);
-    // Seleccionar una al azar del pozo
     const cromoGanado = poolCartas[Math.floor(Math.random() * poolCartas.length)];
 
-    // Añadir al inventario si no lo tiene
     if (!usuario.misCromosIds.includes(cromoGanado.id)) {
         usuario.misCromosIds.push(cromoGanado.id);
     }
@@ -146,7 +138,6 @@ function abrirCofre(tipoCofre, costo) {
     mostrarModalRecompensa(cromoGanado);
 }
 
-// Control del Modal de Premio en Pantalla
 function mostrarModalRecompensa(cromo) {
     const modal = document.getElementById('reward-modal');
     const modalBody = document.getElementById('modal-body-content');
@@ -171,14 +162,12 @@ function mostrarModalRecompensa(cromo) {
     }
 
     if (btnCerrar) {
-        btnCerrar.onclick = () => {
-            modal.classList.add('hidden');
-        };
+        btnCerrar.onclick = () => { modal.classList.add('hidden'); };
     }
 }
 
 // =========================================================================
-//  5. NAVEGACIÓN ENTRE PESTAÑAS
+//  5. SISTEMA DE PESTAÑAS Y NAVEGACIÓN
 // =========================================================================
 if(btnTabCofres) btnTabCofres.addEventListener('click', () => cambiarPestaña(btnTabCofres, viewCofres));
 if(btnTabPerfil) btnTabPerfil.addEventListener('click', () => { cambiarPestaña(btnTabPerfil, viewPerfil); actualizarPerfilVisual(); });
@@ -192,20 +181,19 @@ function cambiarPestaña(boton, vista) {
     cardMenuAbiertoId = null; 
 }
 
-// Botón de la Mazmorra para Farmear Puntos
 const btnMision = document.getElementById('btn-hacer-mision');
 if(btnMision) {
     btnMision.addEventListener('click', () => {
-        usuario.puntos += 250; // Te otorga suficientes puntos para otra invocación
+        usuario.puntos += 250; 
         usuario.misionesCompletadas++;
         guardarYActualizar();
         actualizarPerfilVisual();
-        alert("⚔️ ¡Mazmorra completada con éxito! +250 Puntos de Alma");
+        alert("⚔️ ¡Mazmorra completada! +250 Puntos");
     });
 }
 
 // =========================================================================
-//  6. RENDERIZADO VISUAL DEL ÁLBUM Y EL PERFIL
+//  6. RENDERIZADO VISUAL
 // =========================================================================
 function actualizarPerfilVisual() {
     const elUser = document.getElementById('display-username');
@@ -218,7 +206,6 @@ function actualizarPerfilVisual() {
     if(elPuntos) elPuntos.textContent = usuario.puntos;
     if(elCromos) elCromos.textContent = `${usuario.misCromosIds.length}/${TOTAL_FOTOS_SUBIDAS}`;
     
-    // Actualizar contadores de gemas
     const elGemaComun = document.getElementById('gem-count-comun');
     const elGemaRara = document.getElementById('gem-count-rara');
     const elGemaEpica = document.getElementById('gem-count-epica');
@@ -226,7 +213,6 @@ function actualizarPerfilVisual() {
     if(elGemaRara) elGemaRara.textContent = usuario.gemasRaras;
     if(elGemaEpica) elGemaEpica.textContent = usuario.gemasEpicas;
 
-    // Renderizar la foto de Avatar Grande en tu Perfil
     const contenedorAvatar = document.getElementById('profile-avatar-display');
     if (contenedorAvatar && usuario.avatarCromoId) {
         const infoCromo = TODOS_LOS_CROMOS.find(c => c.id === usuario.avatarCromoId);
@@ -251,7 +237,6 @@ function renderizarAlbum() {
     if (!grid) return;
     grid.innerHTML = '';
     
-    // Mostrar solo los cromos que el usuario posee actualmente
     usuario.misCromosIds.forEach(id => {
         const cromo = TODOS_LOS_CROMOS.find(c => c.id === id);
         if (!cromo) return;
@@ -280,7 +265,7 @@ function renderizarAlbum() {
 }
 
 // =========================================================================
-//  7. LOGICA DE LOS BOTONES INTERNOS DE LAS CARTAS
+//  7. ACCIONES DEL MENÚ FLOTANTE
 // =========================================================================
 window.toggleMenuCarta = function(id, event) {
     if (event.target.classList.contains('btn-action-menu')) return;
@@ -290,22 +275,17 @@ window.toggleMenuCarta = function(id, event) {
 
 window.accionVender = function(id, event) {
     event.stopPropagation();
-    
-    // Evita que el usuario venda el cromo que tiene equipado de avatar
     if (usuario.avatarCromoId === id) {
-        alert("❌ No puedes vender el cromo que estás usando como avatar.");
+        alert("❌ No puedes vender tu cromo de avatar actual.");
         return;
     }
-
-    // Remover ID del inventario y pagarle puntos al jugador
     usuario.misCromosIds = usuario.misCromosIds.filter(cId => cId !== id);
     usuario.puntos += 150; 
-    
     cardMenuAbiertoId = null;
     guardarYActualizar();
     renderizarAlbum();
     actualizarPerfilVisual();
-    alert(`¡Cromo vendido! Recuperaste 150 Puntos de Alma.`);
+    alert("¡Cromo vendido! +150 Puntos.");
 };
 
 window.accionDefinirAvatar = function(id, event) {
@@ -314,7 +294,7 @@ window.accionDefinirAvatar = function(id, event) {
     guardarYActualizar();
     cardMenuAbiertoId = null;
     renderizarAlbum();
-    alert("¡Avatar actualizado correctamente!");
+    alert("¡Avatar actualizado!");
 };
 
 window.accionUsarGema = function(id, event) {
@@ -324,11 +304,10 @@ window.accionUsarGema = function(id, event) {
         guardarYActualizar();
         renderizarAlbum();
         actualizarPerfilVisual();
-        alert(`¡Gema aplicada al cromo #${id}!`);
+        alert(`¡Gema usada en el cromo #${id}!`);
     } else {
-        alert("❌ No te quedan Gemas Raras disponibles.");
+        alert("❌ No te quedan Gemas Raras.");
     }
 };
 
-// Ejecución
 iniciarSistema();
