@@ -1,5 +1,5 @@
 // =========================================================================
-//  1. BASE DE DATOS ADAPTADA A TU CONTENIDO (Molly, Hiyon, etc.)
+//  1. COMENTARIOS Y DECLARACIÓN DE CARTAS REALES
 // =========================================================================
 const DATOS_RAICES_CROMOS = [
     { id: 1, nombre: "Molly, Estrella de las Arenas", rareza: "epico", img: "img/1.png" },
@@ -8,7 +8,7 @@ const DATOS_RAICES_CROMOS = [
     { id: 4, nombre: "Molly, Guardiana Espiritual", rareza: "comun", img: "img/4.png" }
 ];
 
-// Cantidad máxima real de imágenes mapeadas en tu repositorio
+// Cantidad máxima total de cartas añadidas a tu juego
 const TOTAL_FOTOS_SISTEMA = 12;
 
 const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SISTEMA }, (_, index) => {
@@ -16,7 +16,6 @@ const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SISTEMA }, (_, index) 
     const coincidencia = DATOS_RAICES_CROMOS.find(c => c.id === num);
     if (coincidencia) return coincidencia;
 
-    // Relleno dinámico controlado por si invocas IDs superiores
     return {
         id: num,
         nombre: `Crónica Especial #${num}`,
@@ -26,22 +25,22 @@ const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SISTEMA }, (_, index) 
 });
 
 // =========================================================================
-//  2. ESTADO DE BASE DE DATOS DEL JUGADOR
+//  2. ESTADO INICIAL DEL JUGADOR
 // =========================================================================
 let usuario = {
     nombre: "yuki",
     puntos: 311,               
     misionesCompletadas: 0,   
-    gemas: 0,
+    gemas: 10,
     gemasRaras: 0,
     gemasEpicas: 0,
-    misCromosIds: [1, 2, 3, 4], // Inventario Inicial Basado en tus capturas
+    misCromosIds: [1, 2, 3, 4], // Inventario real de inicio
     avatarCromoId: 1
 };
 
 let cardMenuAbiertoId = null;
 
-// Elementos de Interfaz
+// Selectores del DOM
 const btnTabCofres = document.getElementById('tab-btn-cofres');
 const btnTabPerfil = document.getElementById('tab-btn-perfil');
 const btnTabCromos = document.getElementById('tab-btn-cromos');
@@ -50,7 +49,7 @@ const viewPerfil = document.getElementById('view-perfil');
 const viewCromos = document.getElementById('view-cromos');
 
 // =========================================================================
-//  3. INICIALIZACIÓN DE ESCUCHADORES (LISTENERS)
+//  3. CONTROLADORES PRINCIPALES Y LOGS
 // =========================================================================
 function iniciarJuego() {
     const guardadoLocal = localStorage.getItem('sekai_chronicles_save');
@@ -58,7 +57,7 @@ function iniciarJuego() {
         usuario = JSON.parse(guardadoLocal);
     }
 
-    // BOTÓN DE CAMBIO DE NOMBRE DE USUARIO (REPARADO)
+    // Editar Nombre de Usuario
     const btnEditar = document.getElementById('btn-editar-nombre');
     if (btnEditar) {
         btnEditar.addEventListener('click', (e) => {
@@ -73,7 +72,7 @@ function iniciarJuego() {
         });
     }
 
-    // BOTÓN DE MAZMORRA (REPARADO EL AVISO)
+    // Sistema de Mazmorras
     const btnMision = document.getElementById('btn-hacer-mision');
     if (btnMision) {
         btnMision.onclick = () => {
@@ -85,12 +84,11 @@ function iniciarJuego() {
         };
     }
 
-    // Pestañas de Navegación Inter-Pantallas
+    // Enlaces de Navegación de Pestañas
     if (btnTabCofres) btnTabCofres.onclick = () => alternarVistas(btnTabCofres, viewCofres);
     if (btnTabPerfil) btnTabPerfil.onclick = () => { alternarVistas(btnTabPerfil, viewPerfil); actualizarPerfilVisual(); };
     if (btnTabCromos) btnTabCromos.onclick = () => { alternarVistas(btnTabCromos, viewCromos); renderizarAlbumCompleto(); };
 
-    // Ejecuciones Automáticas Iniciales
     generarMiniCarrusel();
     actualizarPerfilVisual();
 }
@@ -99,7 +97,6 @@ function guardarDatosEnLocal() {
     localStorage.setItem('sekai_chronicles_save', JSON.stringify(usuario));
 }
 
-// MENSAJE FLOTANTE PREMIUM (Reemplaza los Alerts de fábrica del navegador)
 function mostrarNotificacionPremium(texto) {
     const toast = document.getElementById('epic-notification');
     if (toast) {
@@ -124,7 +121,9 @@ function generarMiniCarrusel() {
         TODOS_LOS_CROMOS.slice(0, 4).forEach(cromo => {
             track.innerHTML += `
                 <div class="carousel-card">
-                    <img src="${cromo.img}" onerror="this.style.display='none'">
+                    <div class="card-img-box">
+                        <img src="${cromo.img}">
+                    </div>
                     <span>${cromo.nombre.split(',')[0]}</span>
                 </div>`;
         });
@@ -132,7 +131,7 @@ function generarMiniCarrusel() {
 }
 
 // =========================================================================
-//  4. SISTEMA GACHA (INvocaciones)
+//  4. EJECUCIÓN GACHA DE LOS COFRES
 // =========================================================================
 const btnAbrirEvento = document.getElementById('btn-abrir-evento');
 const btnAbrirDiario = document.getElementById('btn-abrir-diario');
@@ -160,7 +159,6 @@ function ejecutarGachaInvocacion(costo, tipo) {
     const cartasFiltradas = TODOS_LOS_CROMOS.filter(c => c.rareza === rarezaSuerte);
     const cromoInvocado = cartasFiltradas[Math.floor(Math.random() * cartasFiltradas.length)];
 
-    // Control estricto: Guardamos el ID en el inventario real
     if (!usuario.misCromosIds.includes(cromoInvocado.id)) {
         usuario.misCromosIds.push(cromoInvocado.id);
     }
@@ -177,7 +175,7 @@ function desplegarModalInvocacion(cromo) {
 
     if (modal && cuerpo) {
         cuerpo.innerHTML = `
-            <div class="card-container-relative" style="max-width: 140px; margin: 10px auto; height: 215px;">
+            <div class="card-container-relative" style="max-width: 140px; margin: 10px auto;">
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
                     <div class="card-img-box"><img src="${cromo.img}"></div>
@@ -190,7 +188,7 @@ function desplegarModalInvocacion(cromo) {
 }
 
 // =========================================================================
-//  5. SISTEMA DE CONTROL VISUAL E INVENTARIOS
+//  5. RENDERIZADO DEL INVENTARIO REAL
 // =========================================================================
 function actualizarPerfilVisual() {
     const domUser = document.getElementById('display-username');
@@ -201,7 +199,6 @@ function actualizarPerfilVisual() {
     if (domPuntos) domPuntos.textContent = usuario.puntos;
     if (domCardsCount) domCardsCount.textContent = `${usuario.misCromosIds.length}/${TOTAL_FOTOS_SISTEMA}`;
 
-    // Actualizar contadores de gemas superiores
     const gComun = document.getElementById('gem-count-comun');
     const gRara = document.getElementById('gem-count-rara');
     const gEpica = document.getElementById('gem-count-epica');
@@ -209,7 +206,6 @@ function actualizarPerfilVisual() {
     if(gRara) gRara.textContent = usuario.gemasRaras;
     if(gEpica) gEpica.textContent = usuario.gemasEpicas;
 
-    // Pintar Avatar de la Carta seleccionada
     const cajaAvatar = document.getElementById('profile-avatar-display');
     if (cajaAvatar && usuario.avatarCromoId) {
         const infoAvatar = TODOS_LOS_CROMOS.find(c => c.id === usuario.avatarCromoId);
@@ -229,33 +225,36 @@ function renderizarAlbumCompleto() {
     if (!grid) return;
     grid.innerHTML = '';
 
-    // Ordenación numérica de cartas ganadas para que no salten posiciones de forma extraña
-    const coleccionOrdenada = [...usuario.misCromosIds].sort((a, b) => a - b);
+    // CONDICIÓN IMPORTANTE: Renderiza solo las cartas compradas/ganadas por el ID del usuario
+    const misCromosReales = TODOS_LOS_CROMOS.filter(cromo => usuario.misCromosIds.includes(cromo.id));
+    misCromosReales.sort((a, b) => a.id - b.id);
 
-    coleccionOrdenada.forEach(id => {
-        const cromo = TODOS_LOS_CROMOS.find(c => c.id === id);
-        if (!cromo) return;
+    if (misCromosReales.length === 0) {
+        grid.innerHTML = `<div style="grid-column: span 3; text-align:center; color:#62717e; padding:20px;">Álbum vacío.</div>`;
+        return;
+    }
 
-        const abierto = cardMenuAbiertoId === id;
+    misCromosReales.forEach(cromo => {
+        const abierto = cardMenuAbiertoId === cromo.id;
 
         grid.innerHTML += `
             <div class="card-container-relative" onclick="conmutarMenuFila(${cromo.id}, event)">
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
-                    <div class="card-img-box"><img src="${cromo.img}"></div>
+                    <div class="card-img-box">
+                        <img src="${cromo.img}" onerror="this.style.opacity='0'; this.style.visibility='hidden';">
+                    </div>
                     <div class="card-footer"><b>${cromo.nombre}</b></div>
                     
                     <div class="card-action-menu ${abierto ? 'visible' : 'hidden'}">
-                        <button class="btn-action-menu" onclick="ejecutarVentaTarjeta(${cromo.id}, event)">Vender (500 exp.)</button>
+                        <button class="btn-action-menu" onclick="ejecutarVentaTarjeta(${cromo.id}, event)">Vender (100 pts.)</button>
                         <button class="btn-action-menu" onclick="fijarComoAvatarPrincipal(${cromo.id}, event)">Establecer Avatar</button>
-                        <button class="btn-action-menu" onclick="gastarGemaEvolucion(${cromo.id}, event)">Usar Gema Rara</button>
                     </div>
                 </div>
             </div>`;
     });
 }
 
-// Interacciones de la cuadrícula
 window.conmutarMenuFila = function(id, e) {
     if (e.target.classList.contains('btn-action-menu')) return;
     cardMenuAbiertoId = (cardMenuAbiertoId === id) ? null : id;
@@ -283,13 +282,8 @@ window.fijarComoAvatarPrincipal = function(id, e) {
     guardarDatosEnLocal();
     cardMenuAbiertoId = null;
     renderizarAlbumCompleto();
+    actualizarPerfilVisual();
     mostrarNotificacionPremium("👤 INTERFAZ DE AVATAR VINCULADA");
 };
 
-window.gastarGemaEvolucion = function(id, e) {
-    e.stopPropagation();
-    mostrarNotificacionPremium("🔮 REQUISITOS DE NIVEL INSUFICIENTES");
-};
-
-// Encendido del motor del sistema
 iniciarJuego();
