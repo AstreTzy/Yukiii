@@ -25,53 +25,52 @@
                 </div>
 
                 <div class="availability-badge" id="badge-evento">3 Cofres Disponibles</div>
-                <div class="timer-display" id="timer-evento">Siguiente reinicio en: 24 horas</div>
-                <div class="cost-tag">Costo: -200 Puntos de Alma</div>
+                <div class="timer-display" id="timer-evento">Reinicios diarios activos</div>
+                <div class="cost-tag">Costo: -400 Puntos de Alma</div>
                 
                 <div class="chest-display">
                     <img src="https://cdn-icons-png.flaticon.com/512/6124/6124991.png" class="main-chest-img" alt="Cofre Evento">
                 </div>
-                <button class="btn-open" id="btn-abrir-evento">Abrir (200 pts.)</button>
+                <button class="btn-open" id="btn-abrir-evento">Abrir (400 pts.)</button>
             </section>
 
             <section class="section-chest">
                 <h2 class="title-chest"><span class="arrow">❯</span> Cofre Diario:</h2>
                 <div class="availability-badge" id="badge-diario">1 Cofre Disponible</div>
-                <div class="timer-display" id="timer-diario">Siguiente reinicio en: 24 horas</div>
-                <div class="cost-tag">Costo: -400 Puntos de Alma</div>
+                <div class="timer-display" id="timer-diario">Disponible cada día</div>
+                <div class="cost-tag">Costo: -200 Puntos de Alma</div>
                 <div class="chest-display">
                     <img src="https://cdn-icons-png.flaticon.com/512/2854/2854570.png" class="main-chest-img" alt="Cofre Diario">
                 </div>
-                <button class="btn-open" id="btn-abrir-diario">Abrir (400 pts.)</button>
+                <button class="btn-open" id="btn-abrir-diario">Abrir (200 pts.)</button>
             </section>
         </div>
 
         <div id="view-perfil" class="view-section hidden">
             <div class="profile-card">
                 <div class="profile-header-box">
-                    <div class="user-tag-title">USUARIO</div>
-                    <div class="main-avatar-container" id="profile-avatar-display">
-                        </div>
+                    <div class="user-tag-title">INVOCADOR</div>
+                    <div class="main-avatar-container" id="profile-avatar-display"></div>
                     <h1 class="profile-username">
                         <span id="display-username">Nuevo Jugador</span> 
                         <span class="edit-text" id="btn-editar-nombre">Registrarse</span>
                     </h1>
                 </div>
 
-                <h3 class="sub-title-profile"><span class="arrow">❯</span> Mis Estadísticas:</h3>
+                <h3 class="sub-title-profile"><span class="arrow">❯</span> Mis Estadísticas RPG:</h3>
                 <div class="stats-panel">
                     <div class="rank-badge-box">
-                        <img src="https://cdn-icons-png.flaticon.com/512/4781/4781517.png" class="rank-icon" alt="Medalla Rango">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2415/2415418.png" class="rank-icon" alt="Rango Invocador">
                     </div>
                     <div class="stats-text-box">
-                        <p>Caps Subidos: <span class="stat-val">0</span></p>
-                        <p>Cromos: <span class="stat-val" id="profile-card-count">0/12</span></p>
-                        <p>Puntos: <span class="stat-val" id="profile-points-count">0</span></p>
+                        <p>Rango de Cuenta: <span class="stat-val" id="profile-rank-level">1</span></p>
+                        <p>Colección Única: <span class="stat-val" id="profile-card-count">0/12</span></p>
+                        <p>Puntos de Alma: <span class="stat-val" id="profile-points-count">0</span></p>
                     </div>
                 </div>
 
                 <div class="progress-section">
-                    <div class="progress-txt">Progreso de medalla <span id="progress-text-percent">0.00 %</span></div>
+                    <div class="progress-txt">Completado del Álbum: <span id="progress-text-percent">0.00 %</span></div>
                     <div class="bar-container">
                         <div class="bar-fill" id="profile-bar-fill" style="width: 0%;"></div>
                     </div>
@@ -83,9 +82,18 @@
 
         <div id="view-cromos" class="view-section hidden">
             <div class="gems-counter-row">
-                <div>Gemas: <span id="gem-count-comun">0</span></div>
-                <div>Gemas Raras: <span id="gem-count-rara">0</span></div>
-                <div>Gemas Épicas: <span id="gem-count-epica">0</span></div>
+                <div>🟢 <span id="gem-count-comun">0</span></div>
+                <div>🔷 <span id="gem-count-rara">0</span></div>
+                <div>💎 <span id="gem-count-epica">0</span></div>
+            </div>
+
+            <div class="shop-exchange-box">
+                <h4 class="shop-title">🔮 TIENDA DE INTERCAMBIO</h4>
+                <div class="shop-buttons-grid">
+                    <button class="btn-shop-item" onclick="comprarPuntosConGemas('comun')">Usar 5 🟢<br>+150 PA</button>
+                    <button class="btn-shop-item" onclick="comprarPuntosConGemas('rara')">Usar 3 🔷<br>+250 PA</button>
+                    <button class="btn-shop-item" onclick="comprarPuntosConGemas('epica')">Usar 1 💎<br>+400 PA</button>
+                </div>
             </div>
             
             <div class="album-grid" id="album-grid-container"></div>
