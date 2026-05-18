@@ -1,116 +1,134 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sekai Chronicles - RPG Gacha</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yukiii - Cartas Místicas</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="top-nav">
-        <button class="nav-item active" id="tab-btn-cofres">Cofres</button>
-        <button class="nav-item" id="tab-btn-perfil">Mis Datos</button>
-        <button class="nav-item" id="tab-btn-cromos">Mis Cromos</button>
-    </header>
+  <nav class="navbar">
+    <div class="tab activo" onclick="cambiarPestaña('cofres')">Cofres</div>
+    <div class="tab" onclick="cambiarPestaña('datos')">Mis Datos</div>
+    <div class="tab" onclick="cambiarPestaña('cromos')">Mis Cromos</div>
+  </nav>
 
-    <main class="content-container">
+  <main class="contenedor-juego">
 
-        <div id="view-cofres" class="view-section">
-            <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Banner de Evento <span class="event-tag">(Navidad)</span>:</h2>
-                
-                <div class="carousel-container">
-                    <div class="carousel-track" id="carrusel-dinamico"></div>
-                </div>
-
-                <div class="availability-badge" id="badge-evento">3 Cofres Disponibles</div>
-                <div class="timer-display" id="timer-evento">Reinicios diarios activos</div>
-                <div class="cost-tag">Costo: -400 Puntos de Alma</div>
-                
-                <div class="chest-display">
-                    <img src="https://cdn-icons-png.flaticon.com/512/6124/6124991.png" class="main-chest-img" alt="Cofre Evento">
-                </div>
-                <button class="btn-open" id="btn-abrir-evento">Abrir (400 pts.)</button>
-            </section>
-
-            <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Cofre Diario:</h2>
-                <div class="availability-badge" id="badge-diario">1 Cofre Disponible</div>
-                <div class="timer-display" id="timer-diario">Disponible cada día</div>
-                <div class="cost-tag">Costo: -200 Puntos de Alma</div>
-                <div class="chest-display">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2854/2854570.png" class="main-chest-img" alt="Cofre Diario">
-                </div>
-                <button class="btn-open" id="btn-abrir-diario">Abrir (200 pts.)</button>
-            </section>
+    <section id="pestaña-cofres" class="seccion-app">
+      
+      <div id="pantalla-carrusel">
+        <h2 class="titulo-seccion">❯ Banner de Evento <span class="dorado">(Navidad):</span></h2>
+        <p class="subtitulo">Elige un cofre para abrir.</p>
+        
+        <div class="carrusel-3d">
+          <div class="cofre-item lateral" onclick="seleccionarCofre(this, 'bosque')">
+            <img src="https://i.postimg.com/zB6b77Xq/Cofre-Bosque.png" alt="Cofre Bosque Divino">
+            <span>Cofre del Bosque Divino</span>
+          </div>
+          <div class="cofre-item activo" onclick="seleccionarCofre(this, 'arenas')">
+            <img src="https://i.postimg.com/D0YgXgYF/Cofre-Arenas.png" alt="Cofre Estrella de las Arenas">
+            <span>Cofre de la Estrella de las Arenas</span>
+          </div>
+          <div class="cofre-item lateral" onclick="seleccionarCofre(this, 'hiyon')">
+            <img src="https://i.postimg.com/43V68K6m/Cofre-Hiyon.png" alt="Cofre del Hiyon">
+            <span>Cofre del Hiyon</span>
+          </div>
         </div>
 
-        <div id="view-perfil" class="view-section hidden">
-            <div class="profile-card">
-                <div class="profile-header-box">
-                    <div class="user-tag-title">INVOCADOR</div>
-                    <div class="main-avatar-container" id="profile-avatar-display"></div>
-                    <h1 class="profile-username">
-                        <span id="display-username">Nuevo Jugador</span> 
-                        <span class="edit-text" id="btn-editar-nombre">Registrarse</span>
-                    </h1>
-                </div>
+        <div class="info-costo">
+          <span class="badge">1 Cofre Disponible</span>
+          <p>Costo: -400 Puntos de Alma</p>
+        </div>
+        <button id="btn-abrir-gacha" class="btn-principal" onclick="comenzarApertura()">Abrir (400 pts.)</button>
+      </div>
 
-                <h3 class="sub-title-profile"><span class="arrow">❯</span> Mis Estadísticas RPG:</h3>
-                <div class="stats-panel">
-                    <div class="rank-badge-box">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2415/2415418.png" class="rank-icon" alt="Rango Invocador">
-                    </div>
-                    <div class="stats-text-box">
-                        <p>Rango de Cuenta: <span class="stat-val" id="profile-rank-level">1</span></p>
-                        <p>Colección Única: <span class="stat-val" id="profile-card-count">0/12</span></p>
-                        <p>Puntos de Alma: <span class="stat-val" id="profile-points-count">0</span></p>
-                    </div>
-                </div>
+      <div id="pantalla-swipe" class="oculto">
+        <h2 class="titulo-seccion">❯ Traza un Gesto</h2>
+        <p class="subtitulo">Traza una línea hacia arriba para abrir.</p>
+        
+        <div class="contenedor-sobre-tactil" id="sobreInteractivo">
+          <div class="sobre-tapa" id="sobreTapa"></div>
+          <div class="sobre-cuerpo" id="sobreCuerpo"></div>
+        </div>
+      </div>
 
-                <div class="progress-section">
-                    <div class="progress-txt">Completado del Álbum: <span id="progress-text-percent">0.00 %</span></div>
-                    <div class="bar-container">
-                        <div class="bar-fill" id="profile-bar-fill" style="width: 0%;"></div>
-                    </div>
-                </div>
-
-                <button class="btn-mission" id="btn-hacer-mision">⚔️ Entrar a Mazmorra (+PA)</button>
-            </div>
+      <div id="pantalla-resultados" class="oculto">
+        <h2 class="titulo-seccion">❯ Resultados</h2>
+        
+        <div class="fila-cartas-reveladas">
+          <div class="carta-revelada nueva"><img src="https://i.postimg.com/qR8vYgXn/Hiyon-Mini.png" alt="Hiyon"><span>Hiyon</span></div>
+          <div class="carta-revelada nueva"><img src="https://i.postimg.com/7Z6fXyZ5/Molly-Mini.png" alt="Molly"><span>Molly</span></div>
+          <div class="carta-revelada nueva especial"><img src="https://i.postimg.com/43Xv46b7/Molly-Bosque.png" alt="Molly Épica"><span>Molly</span></div>
+          <div class="carta-revelada nueva"><img src="https://i.postimg.com/7Z6fXyZ5/Molly-Mini.png" alt="Molly"><span>Molly</span></div>
+          <div class="carta-revelada nueva"><img src="https://i.postimg.com/qR8vYgXn/Hiyon-Mini.png" alt="Hiyon"><span>Hiyon</span></div>
         </div>
 
-        <div id="view-cromos" class="view-section hidden">
-            <div class="gems-counter-row">
-                <div>🟢 <span id="gem-count-comun">0</span></div>
-                <div>🔷 <span id="gem-count-rara">0</span></div>
-                <div>💎 <span id="gem-count-epica">0</span></div>
-            </div>
+        <button class="btn-principal" onclick="irAPruebaCarta()">Ver Recompensa Épica</button>
+      </div>
 
-            <div class="shop-exchange-box">
-                <h4 class="shop-title">🔮 TIENDA DE INTERCAMBIO</h4>
-                <div class="shop-buttons-grid">
-                    <button class="btn-shop-item" onclick="comprarPuntosConGemas('comun')">Usar 5 🟢<br>+150 PA</button>
-                    <button class="btn-shop-item" onclick="comprarPuntosConGemas('rara')">Usar 3 🔷<br>+250 PA</button>
-                    <button class="btn-shop-item" onclick="comprarPuntosConGemas('epica')">Usar 1 💎<br>+400 PA</button>
-                </div>
-            </div>
-            
-            <div class="album-grid" id="album-grid-container"></div>
+      <div id="pantalla-interactiva" class="oculto">
+        <h2 class="titulo-seccion">❯ Prueba la Carta</h2>
+        <p class="subtitulo">Prueba a mover la carta con el dedo o mouse.</p>
+        
+        <div class="zona-3d-carta">
+          <div class="carta-3d-holografica" id="cartaMolly">
+            <div class="capa-brillo" id="capaBrillo"></div>
+          </div>
         </div>
 
-    </main>
+        <button class="btn-principal" onclick="finalizarGacha()">Siguiente</button>
+      </div>
 
-    <div id="reward-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="modal-title" style="color: #e39d39; margin-bottom: 5px;">¡RECOMPENSA!</h2>
-            <div id="modal-body-content"></div>
-            <button class="btn-open" id="btn-cerrar-modal" style="margin-top:20px; max-width:150px;">Aceptar</button>
+    </section>
+
+    <section id="pestaña-datos" class="seccion-app oculto">
+      <div class="perfil-usuario">
+        <div class="rango-badge">EPICO</div>
+        <div class="marco-avatar">
+          <img src="https://i.postimg.com/43Xv46b7/Molly-Bosque.png" alt="Avatar Invocador">
         </div>
-    </div>
+        <h3>yuki <span class="btn-editar">Editar</span></h3>
+        
+        <div class="estadisticas-rpg">
+          <h4>❯ Mis Estadísticas RPG:</h4>
+          <div class="caja-stats">
+            <p>Rango de Cuenta: <strong>44</strong></p>
+            <p>Colección Única: <strong>1 / 12</strong></p>
+            <p>Puntos de Alma: <strong id="pts-alma-txt">3761</strong></p>
+          </div>
+          <div class="progreso-album">
+            <span>Completado del Álbum: 8.33 %</span>
+            <div class="barra-bg"><div class="barra-llena" style="width: 8.33%;"></div></div>
+          </div>
+        </div>
+        <button class="btn-mazmorra">⚔ Entrar a Mazmorra (+PA)</button>
+      </div>
+    </section>
 
-    <div id="epic-notification" class="epic-toast">⚔️ ¡MAZMORRA SUPERADA!</div>
+    <section id="pestaña-cromos" class="seccion-app oculto">
+      <div class="divisas-bar">
+        <span>🟢 3</span> <span>🔷 4</span> <span>💎 1</span>
+      </div>
+      <div class="tienda-intercambio">
+        <h4>🔮 TIENDA DE INTERCHANGE</h4>
+        <div class="opciones-tienda">
+          <div class="item-tienda">Usar 5 🟢<br><strong>+150 PA</strong></div>
+          <div class="item-tienda">Usar 3 🔷<br><strong>+250 PA</strong></div>
+          <div class="item-tienda destacado">Usar 1 💎<br><strong>+400 PA</strong></div>
+        </div>
+      </div>
+      <div class="galeria-cromos">
+        <div class="cromo-card-wrapper">
+          <div class="rango-badge">EPICO</div>
+          <img src="https://i.postimg.com/43Xv46b7/Molly-Bosque.png" alt="Molly">
+        </div>
+      </div>
+    </section>
 
-    <script src="app.js"></script>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
