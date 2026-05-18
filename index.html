@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crónicas de Molly - RPG Gacha</title>
+    <title>Sekai Chronicles - RPG Gacha</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header class="top-nav">
-        <button class="nav-item active" id="tab-btn-cofres">Invocaciones</button>
+        <button class="nav-item active" id="tab-btn-cofres">Cofres</button>
         <button class="nav-item" id="tab-btn-perfil">Mis Datos</button>
         <button class="nav-item" id="tab-btn-cromos">Mis Cromos</button>
     </header>
@@ -18,37 +18,31 @@
 
         <div id="view-cofres" class="view-section">
             <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Banner de Evento <span class="event-tag">(Arenas Cósmicas)</span>:</h2>
+                <h2 class="title-chest"><span class="arrow">❯</span> Banner de Evento <span class="event-tag">(Navidad)</span>:</h2>
                 
                 <div class="carousel-container">
-                    <div class="carousel-track" id="carrusel-dinamico">
-                        </div>
+                    <div class="carousel-track" id="carrusel-dinamico"></div>
                 </div>
 
-                <div class="availability-badge" id="badge-evento">2 Cofres Disponibles</div>
-                <div class="timer-display" id="timer-evento">Siguiente reinicio en: --:--:--</div>
-                <div class="cost-tag">Costo: -500 Puntos de Alma</div>
+                <div class="availability-badge" id="badge-evento">3 Cofres Disponibles</div>
+                <div class="timer-display" id="timer-evento">Siguiente reinicio en: 24 horas</div>
+                <div class="cost-tag">Costo: -200 Puntos de Alma</div>
                 
                 <div class="chest-display">
                     <img src="https://cdn-icons-png.flaticon.com/512/6124/6124991.png" class="main-chest-img" alt="Cofre Evento">
                 </div>
-                <button class="btn-open" id="btn-abrir-evento">Invocación Estándar</button>
+                <button class="btn-open" id="btn-abrir-evento">Abrir (200 pts.)</button>
             </section>
 
             <section class="section-chest">
-                <h2 class="title-chest"><span class="arrow">❯</span> Invocación Divina (Diaria):</h2>
-                <div class="mystery-row">
-                    <div class="card-preview mystery"><div class="card-header comun">Cromo</div><div class="mystery-sign">?</div></div>
-                    <div class="card-preview mystery"><div class="card-header raro">Cromo Raro</div><div class="mystery-sign">?</div></div>
-                    <div class="card-preview mystery"><div class="card-header epico">Cromo Épico</div><div class="mystery-sign">?</div></div>
-                </div>
+                <h2 class="title-chest"><span class="arrow">❯</span> Cofre Diario:</h2>
                 <div class="availability-badge" id="badge-diario">1 Cofre Disponible</div>
-                <div class="timer-display" id="timer-diario">Siguiente reinicio en: --:--:--</div>
-                <div class="cost-tag">Costo: -1000 Puntos de Alma</div>
+                <div class="timer-display" id="timer-diario">Siguiente reinicio en: 24 horas</div>
+                <div class="cost-tag">Costo: -400 Puntos de Alma</div>
                 <div class="chest-display">
                     <img src="https://cdn-icons-png.flaticon.com/512/2854/2854570.png" class="main-chest-img" alt="Cofre Diario">
                 </div>
-                <button class="btn-open" id="btn-abrir-diario">Invocación Épica</button>
+                <button class="btn-open" id="btn-abrir-diario">Abrir (400 pts.)</button>
             </section>
         </div>
 
@@ -57,7 +51,7 @@
                 <div class="profile-header-box">
                     <div class="user-tag-title">USUARIO</div>
                     <div class="main-avatar-container" id="profile-avatar-display">
-                        <div class="no-avatar-msg">Selecciona un cromo como avatar en tu colección</div>
+                        <div class="no-avatar-msg">Selecciona un Cromo en tu Álbum</div>
                     </div>
                     <h1 class="profile-username"><span id="display-username">Pepinito</span> <span class="edit-text" id="btn-editar-nombre">Editar</span></h1>
                 </div>
@@ -68,16 +62,16 @@
                         <img src="https://cdn-icons-png.flaticon.com/512/4781/4781517.png" class="rank-icon" id="rank-medal-icon" alt="Medalla Rango">
                     </div>
                     <div class="stats-text-box">
-                        <p>Mazmorras Superadas: <span class="stat-val" id="stats-misiones">0</span></p>
-                        <p>Héroes Coleccionados: <span class="stat-val" id="profile-card-count">0/300</span></p>
-                        <p>Puntos de Alma: <span class="stat-val" id="profile-points-count">0</span></p>
+                        <p>Caps Subidos: <span class="stat-val">0</span></p>
+                        <p>Cromos: <span class="stat-val" id="profile-card-count">0/300</span></p>
+                        <p>Puntos: <span class="stat-val" id="profile-points-count">0</span></p>
                     </div>
                 </div>
 
                 <div class="progress-section">
-                    <div class="progress-txt">Progreso de medalla <span id="progress-text-percent">0.00 %</span></div>
+                    <div class="progress-txt">Progreso de medalla <span id="progress-text-percent">0.15 %</span></div>
                     <div class="bar-container">
-                        <div class="bar-fill" id="profile-bar-fill"></div>
+                        <div class="bar-fill" id="profile-bar-fill" style="width: 15%;"></div>
                     </div>
                 </div>
 
@@ -87,20 +81,19 @@
 
         <div id="view-cromos" class="view-section hidden">
             <div class="gems-counter-row">
-                <div>Gemas: <span id="gem-count-comun">10</span></div>
+                <div>Gemas: <span id="gem-count-comun">0</span></div>
                 <div>Gemas Raras: <span id="gem-count-rara">0</span></div>
                 <div>Gemas Épicas: <span id="gem-count-epica">0</span></div>
             </div>
             
-            <div class="album-grid" id="album-grid-container">
-                </div>
+            <div class="album-grid" id="album-grid-container"></div>
         </div>
 
     </main>
 
     <div id="reward-modal" class="modal hidden">
         <div class="modal-content">
-            <h2 id="modal-title">¡RECOMPENSA!</h2>
+            <h2 id="modal-title" style="color: #e39d39;">¡RECOMPENSA!</h2>
             <div id="modal-body-content"></div>
             <button class="btn-open" id="btn-cerrar-modal" style="margin-top:20px; max-width:150px;">Aceptar</button>
         </div>
@@ -110,20 +103,20 @@
         <div class="modal-content" style="max-width: 320px;">
             <h2 style="color: #e39d39; margin-top: 0; letter-spacing: 1px;">✨ ¡NUEVO VIAJERO! ✨</h2>
             <p style="font-size: 13px; color: #cbd4db; margin-bottom: 20px; line-height: 1.4;">
-                Bienvenido a <b>Crónicas de Molly</b>. Crea tu cuenta de cazador para recibir tu regalo de iniciación cósmica.
+                Bienvenido a <b>Sekai Chronicles</b>. Registra tu nick para recibir tu regalo de iniciación cósmica.
             </p>
             
             <div style="width: 100%; text-align: left; margin-bottom: 15px;">
-                <label style="font-size: 11px; color: #8393a2; font-weight: bold; display: block; margin-bottom: 5px;">NICKNAME DEL JUGADOR:</label>
-                <input type="text" id="input-nuevo-usuario" placeholder="Ej. CazadorX" style="width: 100%; padding: 11px; background: #161b22; border: 1px solid #3c4b5e; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 14px; outline: none;">
+                <label style="font-size: 11px; color: #8393a2; font-weight: bold; display: block; margin-bottom: 5px;">NICKNAME:</label>
+                <input type="text" id="input-nuevo-usuario" placeholder="Ej. Pepinito" style="width: 100%; padding: 11px; background: #161b22; border: 1px solid #3c4b5e; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 14px; outline: none;">
             </div>
 
             <div style="background: rgba(92, 184, 92, 0.1); border: 1px solid #5cb85c; border-radius: 4px; padding: 12px; margin-bottom: 20px; width: 100%; box-sizing: border-box; text-align: center;">
-                <span style="color: #5cb85c; font-weight: bold; font-size: 12px; display: block; margin-bottom: 2px;">🎁 REGALO DE BIENVENIDA:</span>
-                <span style="font-size: 16px; color: #fff; font-weight: bold; font-family: monospace;">+3,000 Puntos de Alma</span>
+                <span style="color: #5cb85c; font-weight: bold; font-size: 12px; display: block; margin-bottom: 2px;">🎁 REGALO:</span>
+                <span style="font-size: 16px; color: #fff; font-weight: bold; font-family: monospace;">+3,000 Puntos</span>
             </div>
 
-            <button class="btn-open" id="btn-crear-usuario" style="background: linear-gradient(180deg, #5cb85c 0%, #449d44 100%); border-color: #398439; font-size: 14px;">Reclarar Bono y Entrar</button>
+            <button class="btn-open" id="btn-crear-usuario" style="background: linear-gradient(180deg, #5cb85c 0%, #449d44 100%); border-color: #398439; font-size: 14px;">Reclamar Bono</button>
         </div>
     </div>
 
