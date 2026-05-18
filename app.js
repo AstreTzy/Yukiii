@@ -1,11 +1,11 @@
 // =========================================================================
-//  1. DECLARACIÓN DE CROMOS BASE Y SISTEMA
+//  1. DECLARACIÓN DE CROMOS BASE Y SISTEMA (.JPG ASIGNADOS)
 // =========================================================================
 const DATOS_RAICES_CROMOS = [
-    { id: 1, nombre: "Molly, Estrella de las Arenas", rareza: "epico", img: "img/1.png" },
-    { id: 2, nombre: "Molly, Guardiana del Sol Poniente", rareza: "epico", img: "img/2.png" },
-    { id: 3, nombre: "Hiyon, Hechicera del Viento de Sakura", rareza: "raro", img: "img/3.png" },
-    { id: 4, nombre: "Molly, Guardiana Espiritual", rareza: "comun", img: "img/4.png" }
+    { id: 1, nombre: "Molly, Estrella de las Arenas", rareza: "epico", img: "img/1.jpg" },
+    { id: 2, nombre: "Molly, Guardiana del Sol Poniente", rareza: "epico", img: "img/2.jpg" },
+    { id: 3, nombre: "Hiyon, Hechicera del Viento de Sakura", rareza: "raro", img: "img/3.jpg" },
+    { id: 4, nombre: "Molly, Guardiana Espiritual", rareza: "comun", img: "img/4.jpg" }
 ];
 
 const TOTAL_FOTOS_SISTEMA = 12;
@@ -19,22 +19,22 @@ const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SISTEMA }, (_, index) 
         id: num,
         nombre: `Crónica Especial #${num}`,
         rareza: num % 3 === 0 ? "epico" : (num % 2 === 0 ? "raro" : "comun"),
-        img: `img/${num}.png`
+        img: `img/${num}.jpg`
     };
 });
 
 // =========================================================================
-//  2. ESTADO INICIAL DEL USUARIO
+//  2. ESTADO INICIAL PARA UN NUEVO USUARIO (0 PUNTOS / 0 CARTAS)
 // =========================================================================
 let usuario = {
-    nombre: "yuki",
-    puntos: 311,               
+    nombre: "Nuevo Jugador",
+    puntos: 0,               
     misionesCompletadas: 0,   
-    gemas: 10,
+    gemas: 0,
     gemasRaras: 0,
     gemasEpicas: 0,
-    misCromosIds: [1, 2, 3, 4], 
-    avatarCromoId: 1
+    misCromosIds: [], // Inicialmente vacío para que se registren
+    avatarCromoId: null
 };
 
 let cardMenuAbiertoId = null;
@@ -56,14 +56,22 @@ function iniciarJuego() {
         usuario = JSON.parse(guardadoLocal);
     }
 
-    // Evento de Editar Nombre
+    // Evento de Editar / Registrar Nombre
     const btnEditar = document.getElementById('btn-editar-nombre');
     if (btnEditar) {
         btnEditar.addEventListener('click', (e) => {
             e.stopPropagation();
-            const nuevoNick = prompt("Escribe tu nuevo Nickname de Jugador:", usuario.nombre);
+            const nuevoNick = prompt("Escribe tu Nickname de Jugador:", usuario.nombre === "Nuevo Jugador" ? "" : usuario.nombre);
             if (nuevoNick && nuevoNick.trim() !== "") {
                 usuario.nombre = nuevoNick.trim().substring(0, 14);
+                
+                // Si era un usuario completamente nuevo, le damos un paquete de bienvenida
+                if(usuario.puntos === 0 && usuario.misCromosIds.length === 0) {
+                    usuario.puntos = 400; // Suficiente para abrir cofres
+                    usuario.misCromosIds = [1]; // Su primera carta base
+                    usuario.avatarCromoId = 1;
+                }
+
                 guardarDatosEnLocal();
                 actualizarPerfilVisual();
                 mostrarNotificacionPremium(`✨ BIENVENIDO: ${usuario.nombre}`);
@@ -115,18 +123,18 @@ function alternarVistas(botonActivo, vistaActiva) {
 
 function generarMiniCarrusel() {
     const track = document.getElementById('carrusel-dinamico');
-    if (track) {
-        track.innerHTML = '';
-        TODOS_LOS_CROMOS.slice(0, 4).forEach(cromo => {
-            track.innerHTML += `
-                <div class="carousel-card">
-                    <div class="card-img-box">
-                        <img src="${cromo.img}">
-                    </div>
-                    <span>${cromo.nombre.split(',')[0]}</span>
-                </div>`;
-        });
-    }
+    if (!track) return;
+    track.innerHTML = '';
+
+    TODOS_LOS_CROMOS.slice(0, 4).forEach(cromo => {
+        track.innerHTML += `
+            <div class="carousel-card">
+                <div class="card-img-box">
+                    <img src="${cromo.img}" alt="${cromo.nombre}" onerror="this.style.display='none';">
+                </div>
+                <span>${cromo.nombre.split(',')[0]}</span>
+            </div>`;
+    });
 }
 
 // =========================================================================
@@ -138,6 +146,10 @@ if (btnAbrirEvento) btnAbrirEvento.onclick = () => ejecutarGachaInvocacion(200, 
 if (btnAbrirDiario) btnAbrirDiario.onclick = () => ejecutarGachaInvocacion(400, 'diario');
 
 function ejecutarGachaInvocacion(costo, tipo) {
+    if (usuario.nombre === "Nuevo Jugador") {
+        mostrarNotificacionPremium("❌ DEBES REGISTRAR TU NOMBRE PRIMERO");
+        return;
+    }
     if (usuario.puntos < costo) {
         mostrarNotificacionPremium("❌ PUNTOS DE ALMA INSUFICIENTES");
         return;
@@ -178,7 +190,7 @@ function desplegarModalInvocacion(cromo) {
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
                     <div class="card-img-box">
-                        <img src="${cromo.img}" onerror="this.remove();">
+                        <img src="${cromo.img}" onerror="this.style.display='none';">
                     </div>
                     <div class="card-footer"><b>${cromo.nombre}</b></div>
                 </div>
@@ -195,10 +207,12 @@ function actualizarPerfilVisual() {
     const domUser = document.getElementById('display-username');
     const domPuntos = document.getElementById('profile-points-count');
     const domCardsCount = document.getElementById('profile-card-count');
+    const btnEditar = document.getElementById('btn-editar-nombre');
 
     if (domUser) domUser.textContent = usuario.nombre;
     if (domPuntos) domPuntos.textContent = usuario.puntos;
     if (domCardsCount) domCardsCount.textContent = `${usuario.misCromosIds.length}/${TOTAL_FOTOS_SISTEMA}`;
+    if (btnEditar) btnEditar.textContent = usuario.nombre === "Nuevo Jugador" ? "Registrarse" : "Editar";
 
     const gComun = document.getElementById('gem-count-comun');
     const gRara = document.getElementById('gem-count-rara');
@@ -208,16 +222,25 @@ function actualizarPerfilVisual() {
     if(gEpica) gEpica.textContent = usuario.gemasEpicas;
 
     const cajaAvatar = document.getElementById('profile-avatar-display');
-    if (cajaAvatar && usuario.avatarCromoId) {
-        const infoAvatar = TODOS_LOS_CROMOS.find(c => c.id === usuario.avatarCromoId);
-        if (infoAvatar) {
+    if (cajaAvatar) {
+        if (usuario.avatarCromoId) {
+            const infoAvatar = TODOS_LOS_CROMOS.find(c => c.id === usuario.avatarCromoId);
+            if (infoAvatar) {
+                cajaAvatar.innerHTML = `
+                    <div class="card-preview">
+                        <div class="card-header ${infoAvatar.rareza}">${infoAvatar.rareza.toUpperCase()}</div>
+                        <div class="card-img-box">
+                            <img src="${infoAvatar.img}" onerror="this.style.display='none';">
+                        </div>
+                        <div class="card-footer"><b>${infoAvatar.nombre}</b></div>
+                    </div>`;
+            }
+        } else {
             cajaAvatar.innerHTML = `
                 <div class="card-preview">
-                    <div class="card-header ${infoAvatar.rareza}">${infoAvatar.rareza.toUpperCase()}</div>
-                    <div class="card-img-box">
-                        <img src="${infoAvatar.img}" onerror="this.remove();">
-                    </div>
-                    <div class="card-footer"><b>${infoAvatar.nombre}</b></div>
+                    <div class="card-header comun">VACÍO</div>
+                    <div class="card-img-box"></div>
+                    <div class="card-footer"><b>Sin Avatar Activo</b></div>
                 </div>`;
         }
     }
@@ -228,12 +251,11 @@ function renderizarAlbumCompleto() {
     if (!grid) return;
     grid.innerHTML = '';
 
-    // Filtrar cromos en posesión del jugador
     const misCromosReales = TODOS_LOS_CROMOS.filter(cromo => usuario.misCromosIds.includes(cromo.id));
     misCromosReales.sort((a, b) => a.id - b.id);
 
     if (misCromosReales.length === 0) {
-        grid.innerHTML = `<div style="grid-column: span 3; text-align:center; color:#62717e; padding:20px;">Tu álbum está vacío.</div>`;
+        grid.innerHTML = `<div style="grid-column: span 3; text-align:center; color:#62717e; padding:20px;">Tu álbum está vacío. ¡Abre cofres!</div>`;
         return;
     }
 
@@ -245,7 +267,7 @@ function renderizarAlbumCompleto() {
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
                     <div class="card-img-box">
-                        <img src="${cromo.img}" alt="${cromo.nombre}" onerror="this.remove();">
+                        <img src="${cromo.img}" alt="${cromo.nombre}" onerror="this.style.display='none';">
                     </div>
                     <div class="card-footer"><b>${cromo.nombre}</b></div>
                     
