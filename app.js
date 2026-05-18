@@ -1,45 +1,47 @@
 // =========================================================================
-//  1. CONFIGURACIÓN DE CROMOS REALES (Probabilidades y Atributos)
+//  1. BASE DE DATOS ADAPTADA A TU CONTENIDO (Molly, Hiyon, etc.)
 // =========================================================================
+const DATOS_RAICES_CROMOS = [
+    { id: 1, nombre: "Molly, Estrella de las Arenas", rareza: "epico", img: "img/1.png" },
+    { id: 2, nombre: "Molly, Guardiana del Sol Poniente", rareza: "epico", img: "img/2.png" },
+    { id: 3, nombre: "Hiyon, Hechicera del Viento de Sakura", rareza: "raro", img: "img/3.png" },
+    { id: 4, nombre: "Molly, Guardiana Espiritual", rareza: "comun", img: "img/4.png" }
+];
 
-// 👇 Cantidad real de imágenes en tu carpeta img/
-const TOTAL_FOTOS_SUBIDAS = 13; 
+// Cantidad máxima real de imágenes mapeadas en tu repositorio
+const TOTAL_FOTOS_SISTEMA = 12;
 
-// Base de datos de tus cromos indexados por número
-const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SUBIDAS }, (_, index) => {
-    const numero = index + 1;
-    
-    // Asignación automática de rarezas
-    let rarezaCard = "comun";
-    if (numero % 3 === 0) rarezaCard = "epico";
-    else if (numero % 2 === 0) rarezaCard = "raro";
+const TODOS_LOS_CROMOS = Array.from({ length: TOTAL_FOTOS_SISTEMA }, (_, index) => {
+    const num = index + 1;
+    const coincidencia = DATOS_RAICES_CROMOS.find(c => c.id === num);
+    if (coincidencia) return coincidencia;
 
+    // Relleno dinámico controlado por si invocas IDs superiores
     return {
-        id: numero,
-        nombre: `Cromo #${numero}`,
-        rareza: rarezaCard,
-        img: `img/${numero}.png` 
+        id: num,
+        nombre: `Crónica Especial #${num}`,
+        rareza: num % 3 === 0 ? "epico" : (num % 2 === 0 ? "raro" : "comun"),
+        img: `img/${num}.png`
     };
 });
 
 // =========================================================================
-//  2. ESTRUCTURA DE DATOS INTERNA DEL JUGADOR
+//  2. ESTADO DE BASE DE DATOS DEL JUGADOR
 // =========================================================================
 let usuario = {
-    nombre: "Pepinito",
-    puntos: 5700,               
+    nombre: "yuki",
+    puntos: 311,               
     misionesCompletadas: 0,   
-    gemas: 10,
+    gemas: 0,
     gemasRaras: 0,
     gemasEpicas: 0,
-    misCromosIds: [1, 2, 3, 4, 5, 6, 7], // Inventario Inicial
-    avatarCromoId: 6,                     // ID del avatar por defecto
-    ultimoReinicioDia: ""
+    misCromosIds: [1, 2, 3, 4], // Inventario Inicial Basado en tus capturas
+    avatarCromoId: 1
 };
 
 let cardMenuAbiertoId = null;
 
-// Elementos de Interfaz (DOM)
+// Elementos de Interfaz
 const btnTabCofres = document.getElementById('tab-btn-cofres');
 const btnTabPerfil = document.getElementById('tab-btn-perfil');
 const btnTabCromos = document.getElementById('tab-btn-cromos');
@@ -48,266 +50,246 @@ const viewPerfil = document.getElementById('view-perfil');
 const viewCromos = document.getElementById('view-cromos');
 
 // =========================================================================
-//  3. INICIALIZACIÓN DEL JUEGO
+//  3. INICIALIZACIÓN DE ESCUCHADORES (LISTENERS)
 // =========================================================================
-function iniciarSistema() {
-    const guardado = localStorage.getItem('sekai_chronicles_save');
-    const pantallaBienvenida = document.getElementById('welcome-screen');
-
-    if (guardado) { 
-        usuario = JSON.parse(guardado); 
-        if (pantallaBienvenida) pantallaBienvenida.classList.add('hidden');
-    } else {
-        if (pantallaBienvenida) pantallaBienvenida.classList.remove('hidden');
+function iniciarJuego() {
+    const guardadoLocal = localStorage.getItem('sekai_chronicles_save');
+    if (guardadoLocal) {
+        usuario = JSON.parse(guardadoLocal);
     }
-    
-    // Registro de nuevo usuario
-    const btnCrearUsuario = document.getElementById('btn-crear-usuario');
-    const inputNuevoUsuario = document.getElementById('input-nuevo-usuario');
-    if (btnCrearUsuario && inputNuevoUsuario) {
-        btnCrearUsuario.addEventListener('click', () => {
-            const nombreIngresado = inputNuevoUsuario.value.trim();
-            if (nombreIngresado !== "") usuario.nombre = nombreIngresado;
-            usuario.puntos = 3000; 
-            guardarYActualizar();
-            actualizarPerfilVisual();
-            if (pantallaBienvenida) pantallaBienvenida.classList.add('hidden');
+
+    // BOTÓN DE CAMBIO DE NOMBRE DE USUARIO (REPARADO)
+    const btnEditar = document.getElementById('btn-editar-nombre');
+    if (btnEditar) {
+        btnEditar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const nuevoNick = prompt("Escribe tu nuevo Nickname de Jugador:", usuario.nombre);
+            if (nuevoNick && nuevoNick.trim() !== "") {
+                usuario.nombre = nuevoNick.trim().substring(0, 14);
+                guardarDatosEnLocal();
+                actualizarPerfilVisual();
+                mostrarNotificacionPremium(`✨ BIENVENIDO: ${usuario.nombre}`);
+            }
         });
     }
 
-    // Enlace de los botones de Invocación
-    const btnAbrirEvento = document.getElementById('btn-abrir-evento');
-    const btnAbrirDiario = document.getElementById('btn-abrir-diario');
-    
-    if (btnAbrirEvento) btnAbrirEvento.addEventListener('click', () => abrirCofre('evento', 200));
-    if (btnAbrirDiario) btnAbrirDiario.addEventListener('click', () => abrirCofre('diario', 400));
+    // BOTÓN DE MAZMORRA (REPARADO EL AVISO)
+    const btnMision = document.getElementById('btn-hacer-mision');
+    if (btnMision) {
+        btnMision.onclick = () => {
+            usuario.puntos += 25;
+            usuario.misionesCompletadas++;
+            guardarDatosEnLocal();
+            actualizarPerfilVisual();
+            mostrarNotificacionPremium("⚔️ ¡MAZMORRA SUPERADA! +25 Puntos de Alma");
+        };
+    }
 
-    generarCarruselAutomatico();
+    // Pestañas de Navegación Inter-Pantallas
+    if (btnTabCofres) btnTabCofres.onclick = () => alternarVistas(btnTabCofres, viewCofres);
+    if (btnTabPerfil) btnTabPerfil.onclick = () => { alternarVistas(btnTabPerfil, viewPerfil); actualizarPerfilVisual(); };
+    if (btnTabCromos) btnTabCromos.onclick = () => { alternarVistas(btnTabCromos, viewCromos); renderizarAlbumCompleto(); };
+
+    // Ejecuciones Automáticas Iniciales
+    generarMiniCarrusel();
     actualizarPerfilVisual();
 }
 
-function guardarYActualizar() {
+function guardarDatosEnLocal() {
     localStorage.setItem('sekai_chronicles_save', JSON.stringify(usuario));
 }
 
-function generarCarruselAutomatico() {
+// MENSAJE FLOTANTE PREMIUM (Reemplaza los Alerts de fábrica del navegador)
+function mostrarNotificacionPremium(texto) {
+    const toast = document.getElementById('epic-notification');
+    if (toast) {
+        toast.textContent = texto;
+        toast.classList.add('show');
+        setTimeout(() => { toast.classList.remove('show'); }, 2200);
+    }
+}
+
+function alternarVistas(botonActivo, vistaActiva) {
+    [btnTabCofres, btnTabPerfil, btnTabCromos].forEach(b => b?.classList.remove('active'));
+    [viewCofres, viewPerfil, viewCromos].forEach(v => v?.classList.add('hidden'));
+    botonActivo?.classList.add('active');
+    vistaActiva?.classList.remove('hidden');
+    cardMenuAbiertoId = null;
+}
+
+function generarMiniCarrusel() {
     const track = document.getElementById('carrusel-dinamico');
     if (track) {
-        track.innerHTML = ''; 
-        TODOS_LOS_CROMOS.slice(0, 5).forEach(cromo => {
+        track.innerHTML = '';
+        TODOS_LOS_CROMOS.slice(0, 4).forEach(cromo => {
             track.innerHTML += `
                 <div class="carousel-card">
-                    <img src="${cromo.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1041/1041446.png'">
-                    <span>${cromo.nombre}</span>
+                    <img src="${cromo.img}" onerror="this.style.display='none'">
+                    <span>${cromo.nombre.split(',')[0]}</span>
                 </div>`;
         });
     }
 }
 
 // =========================================================================
-//  4. SISTEMA GACHA (INVOCACIÓN)
+//  4. SISTEMA GACHA (INvocaciones)
 // =========================================================================
-function abrirCofre(tipoCofre, costo) {
+const btnAbrirEvento = document.getElementById('btn-abrir-evento');
+const btnAbrirDiario = document.getElementById('btn-abrir-diario');
+if (btnAbrirEvento) btnAbrirEvento.onclick = () => ejecutarGachaInvocacion(200, 'evento');
+if (btnAbrirDiario) btnAbrirDiario.onclick = () => ejecutarGachaInvocacion(400, 'diario');
+
+function ejecutarGachaInvocacion(costo, tipo) {
     if (usuario.puntos < costo) {
-        alert("❌ No tienes suficientes Puntos.");
+        mostrarNotificacionPremium("❌ PUNTOS DE ALMA INSUFICIENTES");
         return;
     }
 
     usuario.puntos -= costo;
+    let rarezaSuerte = "comun";
+    const tiroDado = Math.random() * 100;
 
-    let rarezaObtenida = "comun";
-    const rand = Math.random() * 100;
-
-    if (tipoCofre === 'diario') {
-        if (rand < 25) rarezaObtenida = "epico";       
-        else if (rand < 65) rarezaObtenida = "raro";   
+    if (tipo === 'diario') {
+        if (tiroDado < 25) rarezaSuerte = "epico";
+        else if (tiroDado < 70) rarezaSuerte = "raro";
     } else {
-        if (rand < 10) rarezaObtenida = "epico";       
-        else if (rand < 40) rarezaObtenida = "raro";   
+        if (tiroDado < 15) rarezaSuerte = "epico";
+        else if (tiroDado < 50) rarezaSuerte = "raro";
     }
 
-    const poolCartas = TODOS_LOS_CROMOS.filter(c => c.rareza === rarezaObtenida);
-    const cromoGanado = poolCartas[Math.floor(Math.random() * poolCartas.length)];
+    const cartasFiltradas = TODOS_LOS_CROMOS.filter(c => c.rareza === rarezaSuerte);
+    const cromoInvocado = cartasFiltradas[Math.floor(Math.random() * cartasFiltradas.length)];
 
-    if (!usuario.misCromosIds.includes(cromoGanado.id)) {
-        usuario.misCromosIds.push(cromoGanado.id);
+    // Control estricto: Guardamos el ID en el inventario real
+    if (!usuario.misCromosIds.includes(cromoInvocado.id)) {
+        usuario.misCromosIds.push(cromoInvocado.id);
     }
 
-    guardarYActualizar();
+    guardarDatosEnLocal();
     actualizarPerfilVisual();
-    mostrarModalRecompensa(cromoGanado);
+    desplegarModalInvocacion(cromoInvocado);
 }
 
-function mostrarModalRecompensa(cromo) {
+function desplegarModalInvocacion(cromo) {
     const modal = document.getElementById('reward-modal');
-    const modalBody = document.getElementById('modal-body-content');
-    const btnCerrar = document.getElementById('btn-cerrar-modal');
+    const cuerpo = document.getElementById('modal-body-content');
+    const cerrar = document.getElementById('btn-cerrar-modal');
 
-    if (modal && modalBody) {
-        modalBody.innerHTML = `
-            <p style="color: #cbd4db; font-size: 14px;">Has obtenido:</p>
-            <div class="card-container-relative" style="max-width: 150px; margin: 0 auto; height: 230px;">
+    if (modal && cuerpo) {
+        cuerpo.innerHTML = `
+            <div class="card-container-relative" style="max-width: 140px; margin: 10px auto; height: 215px;">
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
-                    <div class="card-img-box">
-                        <img src="${cromo.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1041/1041446.png'">
-                    </div>
-                    <div class="card-footer">
-                        <b>${cromo.nombre}</b>
-                    </div>
+                    <div class="card-img-box"><img src="${cromo.img}"></div>
+                    <div class="card-footer"><b>${cromo.nombre}</b></div>
                 </div>
-            </div>
-        `;
+            </div>`;
         modal.classList.remove('hidden');
     }
-
-    if (btnCerrar) {
-        btnCerrar.onclick = () => { modal.classList.add('hidden'); };
-    }
+    if (cerrar) cerrar.onclick = () => modal.classList.add('hidden');
 }
 
 // =========================================================================
-//  5. SISTEMA DE PESTAÑAS Y NAVEGACIÓN
-// =========================================================================
-if(btnTabCofres) btnTabCofres.addEventListener('click', () => cambiarPestaña(btnTabCofres, viewCofres));
-if(btnTabPerfil) btnTabPerfil.addEventListener('click', () => { cambiarPestaña(btnTabPerfil, viewPerfil); actualizarPerfilVisual(); });
-if(btnTabCromos) btnTabCromos.addEventListener('click', () => { cambiarPestaña(btnTabCromos, viewCromos); renderizarAlbum(); });
-
-function cambiarPestaña(boton, vista) {
-    [btnTabCofres, btnTabPerfil, btnTabCromos].forEach(b => { if(b) b.classList.remove('active'); });
-    [viewCofres, viewPerfil, viewCromos].forEach(v => { if(v) v.classList.add('hidden'); });
-    if(boton) boton.classList.add('active'); 
-    if(vista) vista.classList.remove('hidden');
-    cardMenuAbiertoId = null; 
-}
-
-const btnMision = document.getElementById('btn-hacer-mision');
-if(btnMision) {
-    btnMision.addEventListener('click', () => {
-        usuario.puntos += 250; 
-        usuario.misionesCompletadas++;
-        guardarYActualizar();
-        actualizarPerfilVisual();
-        alert("⚔️ ¡Mazmorra completada! +250 Puntos");
-    });
-}
-
-// =========================================================================
-//  6. RENDERIZADO VISUAL
+//  5. SISTEMA DE CONTROL VISUAL E INVENTARIOS
 // =========================================================================
 function actualizarPerfilVisual() {
-    const elUser = document.getElementById('display-username');
-    const elMisiones = document.getElementById('stats-misiones');
-    const elPuntos = document.getElementById('profile-points-count');
-    const elCromos = document.getElementById('profile-card-count');
+    const domUser = document.getElementById('display-username');
+    const domPuntos = document.getElementById('profile-points-count');
+    const domCardsCount = document.getElementById('profile-card-count');
 
-    if(elUser) elUser.textContent = usuario.nombre;
-    if(elMisiones) elMisiones.textContent = usuario.misionesCompletadas;
-    if(elPuntos) elPuntos.textContent = usuario.puntos;
-    if(elCromos) elCromos.textContent = `${usuario.misCromosIds.length}/${TOTAL_FOTOS_SUBIDAS}`;
-    
-    const elGemaComun = document.getElementById('gem-count-comun');
-    const elGemaRara = document.getElementById('gem-count-rara');
-    const elGemaEpica = document.getElementById('gem-count-epica');
-    if(elGemaComun) elGemaComun.textContent = usuario.gemas;
-    if(elGemaRara) elGemaRara.textContent = usuario.gemasRaras;
-    if(elGemaEpica) elGemaEpica.textContent = usuario.gemasEpicas;
+    if (domUser) domUser.textContent = usuario.nombre;
+    if (domPuntos) domPuntos.textContent = usuario.puntos;
+    if (domCardsCount) domCardsCount.textContent = `${usuario.misCromosIds.length}/${TOTAL_FOTOS_SISTEMA}`;
 
-    const contenedorAvatar = document.getElementById('profile-avatar-display');
-    if (contenedorAvatar && usuario.avatarCromoId) {
-        const infoCromo = TODOS_LOS_CROMOS.find(c => c.id === usuario.avatarCromoId);
-        if (infoCromo) {
-            contenedorAvatar.innerHTML = `
+    // Actualizar contadores de gemas superiores
+    const gComun = document.getElementById('gem-count-comun');
+    const gRara = document.getElementById('gem-count-rara');
+    const gEpica = document.getElementById('gem-count-epica');
+    if(gComun) gComun.textContent = usuario.gemas;
+    if(gRara) gRara.textContent = usuario.gemasRaras;
+    if(gEpica) gEpica.textContent = usuario.gemasEpicas;
+
+    // Pintar Avatar de la Carta seleccionada
+    const cajaAvatar = document.getElementById('profile-avatar-display');
+    if (cajaAvatar && usuario.avatarCromoId) {
+        const infoAvatar = TODOS_LOS_CROMOS.find(c => c.id === usuario.avatarCromoId);
+        if (infoAvatar) {
+            cajaAvatar.innerHTML = `
                 <div class="card-preview">
-                    <div class="card-header ${infoCromo.rareza}">${infoCromo.rareza.toUpperCase()}</div>
-                    <div class="card-img-box">
-                        <img src="${infoCromo.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1041/1041446.png'">
-                    </div>
-                    <div class="card-footer">
-                        <b>${infoCromo.nombre}</b>
-                    </div>
+                    <div class="card-header ${infoAvatar.rareza}">${infoAvatar.rareza.toUpperCase()}</div>
+                    <div class="card-img-box"><img src="${infoAvatar.img}"></div>
+                    <div class="card-footer"><b>${infoAvatar.nombre}</b></div>
                 </div>`;
-            return;
         }
     }
 }
 
-function renderizarAlbum() {
+function renderizarAlbumCompleto() {
     const grid = document.getElementById('album-grid-container');
     if (!grid) return;
     grid.innerHTML = '';
-    
-    usuario.misCromosIds.forEach(id => {
+
+    // Ordenación numérica de cartas ganadas para que no salten posiciones de forma extraña
+    const coleccionOrdenada = [...usuario.misCromosIds].sort((a, b) => a - b);
+
+    coleccionOrdenada.forEach(id => {
         const cromo = TODOS_LOS_CROMOS.find(c => c.id === id);
         if (!cromo) return;
 
-        const esMenuAbierto = cardMenuAbiertoId === id;
+        const abierto = cardMenuAbiertoId === id;
 
         grid.innerHTML += `
-            <div class="card-container-relative" onclick="toggleMenuCarta(${cromo.id}, event)">
+            <div class="card-container-relative" onclick="conmutarMenuFila(${cromo.id}, event)">
                 <div class="card-preview">
                     <div class="card-header ${cromo.rareza}">${cromo.rareza.toUpperCase()}</div>
-                    <div class="card-img-box">
-                        <img src="${cromo.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1041/1041446.png'">
-                    </div>
-                    <div class="card-footer">
-                        <b>${cromo.nombre}</b>
-                    </div>
+                    <div class="card-img-box"><img src="${cromo.img}"></div>
+                    <div class="card-footer"><b>${cromo.nombre}</b></div>
                     
-                    <div class="card-action-menu ${esMenuAbierto ? 'visible' : 'hidden'}">
-                        <button class="btn-action-menu" onclick="accionVender(${cromo.id}, event)">Vender (+150 pts)</button>
-                        <button class="btn-action-menu" onclick="accionDefinirAvatar(${cromo.id}, event)">Establecer Avatar</button>
-                        <button class="btn-action-menu" onclick="accionUsarGema(${cromo.id}, event)">Usar Gema Rara</button>
+                    <div class="card-action-menu ${abierto ? 'visible' : 'hidden'}">
+                        <button class="btn-action-menu" onclick="ejecutarVentaTarjeta(${cromo.id}, event)">Vender (500 exp.)</button>
+                        <button class="btn-action-menu" onclick="fijarComoAvatarPrincipal(${cromo.id}, event)">Establecer Avatar</button>
+                        <button class="btn-action-menu" onclick="gastarGemaEvolucion(${cromo.id}, event)">Usar Gema Rara</button>
                     </div>
                 </div>
             </div>`;
     });
 }
 
-// =========================================================================
-//  7. ACCIONES DEL MENÚ FLOTANTE
-// =========================================================================
-window.toggleMenuCarta = function(id, event) {
-    if (event.target.classList.contains('btn-action-menu')) return;
+// Interacciones de la cuadrícula
+window.conmutarMenuFila = function(id, e) {
+    if (e.target.classList.contains('btn-action-menu')) return;
     cardMenuAbiertoId = (cardMenuAbiertoId === id) ? null : id;
-    renderizarAlbum();
+    renderizarAlbumCompleto();
 };
 
-window.accionVender = function(id, event) {
-    event.stopPropagation();
+window.ejecutarVentaTarjeta = function(id, e) {
+    e.stopPropagation();
     if (usuario.avatarCromoId === id) {
-        alert("❌ No puedes vender tu cromo de avatar actual.");
+        mostrarNotificacionPremium("❌ TU AVATAR NO PUEDE SER VENDIDO");
         return;
     }
-    usuario.misCromosIds = usuario.misCromosIds.filter(cId => cId !== id);
-    usuario.puntos += 150; 
+    usuario.misCromosIds = usuario.misCromosIds.filter(c => c !== id);
+    usuario.puntos += 100;
     cardMenuAbiertoId = null;
-    guardarYActualizar();
-    renderizarAlbum();
+    guardarDatosEnLocal();
+    renderizarAlbumCompleto();
     actualizarPerfilVisual();
-    alert("¡Cromo vendido! +150 Puntos.");
+    mostrarNotificacionPremium("💰 CROMO RECICLADO +100 PA");
 };
 
-window.accionDefinirAvatar = function(id, event) {
-    event.stopPropagation();
+window.fijarComoAvatarPrincipal = function(id, e) {
+    e.stopPropagation();
     usuario.avatarCromoId = id;
-    guardarYActualizar();
+    guardarDatosEnLocal();
     cardMenuAbiertoId = null;
-    renderizarAlbum();
-    alert("¡Avatar actualizado!");
+    renderizarAlbumCompleto();
+    mostrarNotificacionPremium("👤 INTERFAZ DE AVATAR VINCULADA");
 };
 
-window.accionUsarGema = function(id, event) {
-    event.stopPropagation();
-    if (usuario.gemas > 0) {
-        usuario.gemas--;
-        guardarYActualizar();
-        renderizarAlbum();
-        actualizarPerfilVisual();
-        alert(`¡Gema usada en el cromo #${id}!`);
-    } else {
-        alert("❌ No te quedan Gemas Raras.");
-    }
+window.gastarGemaEvolucion = function(id, e) {
+    e.stopPropagation();
+    mostrarNotificacionPremium("🔮 REQUISITOS DE NIVEL INSUFICIENTES");
 };
 
-iniciarSistema();
+// Encendido del motor del sistema
+iniciarJuego();
