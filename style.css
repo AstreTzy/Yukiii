@@ -9,14 +9,12 @@ body {
     user-select: none;
 }
 
-/* Títulos con Tipografía Gaming */
-.title-chest, .user-tag-title, .profile-username, #modal-title, .epic-toast {
+.title-chest, .user-tag-title, .profile-username, #modal-title, .epic-toast, .shop-title {
     font-family: 'Orbitron', sans-serif;
     letter-spacing: 1px;
     text-shadow: 0 0 8px rgba(227, 157, 57, 0.3);
 }
 
-/* Barra Navegación Superior */
 .top-nav {
     background-color: #161f28;
     display: flex;
@@ -37,13 +35,12 @@ body {
 
 .content-container { padding: 14px; max-width: 430px; margin: 0 auto; }
 .hidden { display: none !important; }
-
 .section-chest { margin-bottom: 25px; }
 .title-chest { font-size: 15px; color: #fff; margin: 0 0 10px 0; font-weight: 600; }
 .arrow { color: #e39d39; margin-right: 5px; }
 .event-tag { color: #5bc0de; font-size: 12px; }
 
-/* Carrusel Horizontal de los Banners */
+/* Carrusel Horizontal */
 .carousel-container {
     background: #090d10; padding: 10px; border-radius: 4px;
     overflow: hidden; display: flex; margin-bottom: 15px;
@@ -81,7 +78,8 @@ body {
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
     font-family: 'Orbitron', sans-serif;
 }
-.btn-open:active { transform: scale(0.98); background: #151b22; }
+.btn-open:disabled { background: #1a1f24; color: #4e5b66; border-color: #111; cursor: not-allowed; }
+.btn-open:not(:disabled):active { transform: scale(0.98); background: #151b22; }
 
 .btn-mission {
     background: linear-gradient(180deg, #e39d39 0%, #b8761d 100%);
@@ -89,62 +87,56 @@ body {
     font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;
     font-family: 'Orbitron', sans-serif;
     box-shadow: 0 4px 10px rgba(227,157,57,0.2);
+    transition: all 0.2s;
 }
-.btn-mission:active { transform: scale(0.98); }
+.btn-mission:disabled { background: #28313a; color: #62717e; border-color: #1a222a; box-shadow: none; cursor: not-allowed; }
+.btn-mission:not(:disabled):active { transform: scale(0.98); }
 
 /* Sistema de Rejilla del Álbum */
 .album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 8px; }
-.gems-counter-row { display: flex; justify-content: space-between; background: #161f28; padding: 10px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-bottom: 15px; border: 1px solid #23313f; color: #e39d39; font-family: 'Orbitron', sans-serif; }
+.gems-counter-row { display: flex; justify-content: space-around; background: #161f28; padding: 10px; border-radius: 4px; font-size: 14px; font-weight: bold; margin-bottom: 12px; border: 1px solid #23313f; color: #e39d39; font-family: 'Orbitron', sans-serif; }
 
-.card-container-relative { 
-    position: relative; 
-    width: 100%; 
+/* TIENDA INTERNA */
+.shop-exchange-box { background: #0f151b; border: 1px solid #1f2a36; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+.shop-title { font-size: 11px; color: #fff; text-align: center; margin: 0 0 8px 0; color: #f3be7a; }
+.shop-buttons-grid { display: flex; gap: 6px; justify-content: space-between; }
+.btn-shop-item { background: #161f28; border: 1px solid #2e3f51; color: #cbd4db; font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: bold; padding: 6px; border-radius: 4px; cursor: pointer; flex: 1; text-align: center; }
+.btn-shop-item:hover { background: #23313f; border-color: #e39d39; color: #fff; }
+
+.card-container-relative { position: relative; width: 100%; perspective: 800px; }
+
+/* Cantidad flotante de repetidos */
+.card-badge-quantity {
+    position: absolute; top: 24px; right: 4px; background: rgba(7, 10, 13, 0.9);
+    border: 1px solid #e39d39; color: #e39d39; font-family: 'Orbitron', sans-serif;
+    font-size: 9px; font-weight: bold; padding: 1px 4px; border-radius: 3px; z-index: 5;
 }
 
 /* Estructura Base Uniforme de las Cartas */
 .card-preview {
-    background-color: #151a21; 
-    border: 1px solid #232d3a; 
-    border-radius: 6px;
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    box-sizing: border-box;
-    width: 100%;
+    background-color: #151a21; border: 1px solid #232d3a; border-radius: 6px;
+    display: flex; flex-direction: column; overflow: hidden; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5); box-sizing: border-box; width: 100%;
+    transform-style: preserve-3d; transition: transform 0.3s ease;
+}
+.card-container-relative:hover .card-preview { transform: rotateY(-4deg) scale(1.02); }
+
+/* Glow dinámico para cartas Épicas */
+.card-preview:has(.card-header.epico) {
+    border-color: #e39d39;
+    animation: epicGlowBorder 3s infinite ease-in-out;
+}
+@keyframes epicGlowBorder {
+    0%, 100% { box-shadow: 0 0 8px rgba(227, 157, 57, 0.2); }
+    50% { box-shadow: 0 0 16px rgba(227, 157, 57, 0.45); }
 }
 
-/* CONTENEDOR DE LA ILUSTRACIÓN */
 .card-img-box { 
-    width: 100%;
-    aspect-ratio: 2 / 2.8;
-    background: #090d10; 
-    position: relative; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    overflow: hidden;
+    width: 100%; aspect-ratio: 2 / 2.8; background: #090d10; 
+    position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
-
-/* Ajuste de Imagen */
-.card-img-box img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover;
-    display: block;
-    position: relative;
-    z-index: 2;
-}
-
-/* Fondo místico centrado de respaldo */
-.card-img-box::before { 
-    content: "🔮"; 
-    font-size: 22px; 
-    position: absolute; 
-    z-index: 1;
-    opacity: 0.4; 
-    animation: pulseGlow 2s infinite ease-in-out; 
-}
+.card-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; position: relative; z-index: 2; }
+.card-img-box::before { content: "🔮"; font-size: 22px; position: absolute; z-index: 1; opacity: 0.4; animation: pulseGlow 2s infinite ease-in-out; }
 
 @keyframes pulseGlow {
     0%, 100% { transform: scale(1); opacity: 0.2; }
@@ -164,18 +156,8 @@ body {
 .profile-header-box { text-align: center; margin-bottom: 15px; position: relative; }
 .user-tag-title { background: #23313f; color: #fff; font-size: 11px; font-weight: bold; padding: 5px 0; width: 100%; border-radius: 3px; margin-bottom: 12px; }
 
-/* Contenedor del Avatar en el Perfil - CORREGIDO */
-.main-avatar-container { 
-    width: 140px;          /* Limitamos el ancho exacto */
-    margin: 0 auto;        /* Centrado */
-    border-radius: 6px; 
-    perspective: 800px;
-}
-/* Evita que la carta inyectada se desborde o se estire feo en horizontal */
-.main-avatar-container .card-preview {
-    width: 100% !important;
-    max-width: 140px !important;
-}
+.main-avatar-container { width: 140px; margin: 0 auto; border-radius: 6px; }
+.main-avatar-container .card-preview { width: 100% !important; max-width: 140px !important; }
 
 .profile-username { font-size: 20px; margin: 12px 0 0 0; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .edit-text { font-size: 11px; color: #e39d39; border: 1px solid rgba(227, 157, 57, 0.4); padding: 2px 6px; border-radius: 3px; background: rgba(0, 0, 0, 0.3); cursor: pointer; font-weight: normal; font-family: 'Rajdhani', sans-serif; }
@@ -194,10 +176,6 @@ body {
 /* Modales */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; }
 .modal-content { background: #161f28; padding: 20px; border-radius: 6px; text-align: center; max-width: 250px; width: 100%; border: 1px solid #2e3f51; }
-
-.main-avatar-container, .card-container-relative { perspective: 800px; }
-.main-avatar-container .card-preview, .card-container-relative .card-preview { transform-style: preserve-3d; transition: transform 0.3s ease; }
-.card-container-relative:hover .card-preview { transform: rotateY(-4deg) scale(1.01); }
 
 .card-action-menu {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
